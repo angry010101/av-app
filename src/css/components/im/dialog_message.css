@@ -1,0 +1,93 @@
+.msg_container{
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.msg_wrapper{
+	position: relative;
+	padding-left: 12px;
+}
+
+.selected{
+	background-color: #b7dadb;
+	position: relative;
+}
+
+.msg_date_text{
+	float: right;
+	font-size: 10pt;
+	margin-right: 8px;
+	color: #969696; /*#0885f3;
+
+
+*/
+}
+
+.msg_content{
+
+}
+
+.msg_delete{
+	float: right;
+	font-size: 10pt;
+	margin-right: 4px;
+	color: #969696; 
+}
+
+.msg_content_div{
+	width: calc(100% - 66px);
+	margin-left: 12px;
+}
+
+.msg_headers{
+	height: 18px;
+	margin-bottom: 4px;
+}
+
+.msg_text{
+	vertical-align: top;
+
+    font-size: 11pt;
+    max-width: calc(100% - 62px);
+    word-wrap: break-word;
+	word-break: break-all;
+}
+
+.msg_container .photo_img {
+	width: 50px;
+	height: 50px;
+	border-radius: 24px;
+}
+
+.msg_state{
+	width: 36px;
+	height: 36px;
+	background: white;
+	margin-right: 12px;
+	margin-left: 6px;
+}
+
+
+.msg_name_text {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+	vertical-align: top;
+	color: #000;
+
+	min-width: 64px;
+	text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+    text-overflow: ellipsis;
+    float: left;
+    max-width: calc(100% - 96px);
+    font-weight: bold;
+}
+
+
+
+@media screen and (min-width:10px) and (max-width:400px) {
+
+
+}

@@ -1,0 +1,10 @@
+.wall_attachment_wrapper{
+	background-color: whitesmoke;
+	width: 100%;
+	padding: 4px;
+}
+
+.wall_attachment_title{
+	font-size: 12pt;
+	font-weight: bold;
+}

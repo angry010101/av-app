@@ -1,0 +1,48 @@
+.feed_item_wrapper{
+	background-color: yellow;
+	margin-top: 8px;
+	min-height: 196px;
+}	
+
+.feed_item_content{
+	padding: 6px;
+	width: calc(100% - 12px);
+}
+
+.photo_img{
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+	background-color: black;
+}
+
+.content_div{
+	margin-left: 8px;
+	display: inline-block;
+	vertical-align: top;
+	width: calc(100% - 64px);
+}
+
+
+.label_post_title{
+
+}
+
+
+.label_post_text{
+
+}
+
+.feed_item_header_wrapper{
+	width: 100%;
+	background-color: violet;
+}
+
+.feed_item_main_content_wrapper{
+	background-color: purple;
+}
+
+.feed_item_main_content{
+	background-color: purple;
+	min-height: 100%;
+}

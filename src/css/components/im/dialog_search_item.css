@@ -1,0 +1,36 @@
+.dlgsearch_item_div{
+	width: 100%;
+	min-height: 56px;
+	padding-top: 6px;
+}
+
+.dlgsearch_text{
+	font-size: 14pt;
+	font-family: arial;
+	display: inline-block;
+	vertical-align: top;
+	width: calc(100% - 66px);
+	word-wrap: break-word;
+	word-break: break-all;
+	padding-top: 12px;
+	margin-left: 4px;
+}
+
+.dlgsearch_item_div_h :hover{
+	background-color: #d3dfe7;
+}
+
+.dlgsearch_img{
+	margin-right: 8px;
+	margin-left: 4px;
+	vertical-align: bottom;
+	width: 42px;
+	text-align: left;
+	height: 42px;
+	display: inline-block;
+	border-radius: 25px;
+	
+	background-position: 50%;
+	background-image: url("/images/photo_50.png");
+	border: 4px double #adadad;
+}

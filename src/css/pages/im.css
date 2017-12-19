@@ -1,0 +1,168 @@
+.content {
+	height: 100%;
+
+	
+	display: flex;
+	background-color: white;
+	text-align: left;
+	position: absolute;
+	width: 100%;
+	z-index: -99;
+}
+
+.content div {
+
+}
+
+.container{
+	display: inline-block;
+	height: 100%;
+}
+
+.left {
+	//width: 324px;
+	background-color: white;
+	width: 348px;
+	max-width: 348px;
+	//width: 35%;
+	
+
+	border-right: 1px solid #3C99B4;
+}
+
+.container_previev_messages{
+	-webkit-overflow-scrolling: touch;
+	overflow-y: scroll;
+	height: calc(100% - 40px);
+}
+
+.right {
+	background-color: #fcfcfc; /*#fcfcfc;*/
+	height: 100%;
+	overflow-y: hidden;
+	width: inherit;
+	position: relative;
+}
+
+.main_im_div{
+	height: calc(100% - 42px);
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	z-index: 1;
+	width: 100%;
+}
+
+.hide{
+	z-index: 5 !important;
+}
+
+.ad_banner{
+	width: 100%;
+	background-color: #3C99B4;
+	display: block;
+	bottom: 0;
+	position: fixed;
+	height: 60px;
+}
+
+
+
+@media screen and (min-width:230px) and (max-width:808px) {
+
+.container {
+    position: absolute;
+    margin-left: 0;
+    width: 100%;
+}
+
+.left {
+    z-index: 3;
+    max-width: 100%;
+    width: 100%;
+    border-right: 0;
+}
+
+.right{
+    z-index: 2;
+}
+
+.main_msg_options{
+    width: 0;
+}
+
+.msg_attachments{
+    margin-left: 0px;
+}
+
+a:hover{
+	background-color: transparent !important;
+}
+
+}
+
+@media screen and (min-width:36px) and (max-width:230px) {
+
+
+a:hover{
+	background-color: transparent !important;
+}
+
+.msg_attachments{
+    width: 75%;
+    margin-left: 0px;
+}
+
+
+.main_photo_img{
+    display: none;
+}
+
+.prev_msg_text{
+    max-width: 100%;
+    font-size: 11pt;
+    font-family: arial;
+}
+
+.container {
+    position: absolute;
+    margin-left: 0;
+    width: 100%;
+}
+
+.left {
+    z-index: 1;
+    width: 100%;
+    max-width: 100%;
+    min-width: 48px;
+
+    border-right: 0;
+}
+
+.logo_img{
+    display: none;
+}
+
+.profile_img{
+    display: none;
+}
+
+.right{
+    display: none;
+}
+
+.btn_back_text{
+	display: none;
+}
+.main_msg_text {
+    max-width: 100%;
+}
+
+.photo_img{
+    display: none;
+}
+
+.main_msg_options{
+    width: 0;
+}
+}

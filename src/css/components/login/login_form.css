@@ -1,0 +1,59 @@
+.login_div{
+	text-align: center;
+	margin-top: 58px;
+
+}
+
+.form_login{
+	width: 300px;
+	padding-bottom: 20px;
+	margin: 0 auto;
+}
+
+.login_label{
+
+}
+
+.textinput {
+	width: 250px; /* width of image */
+	font-size: 20px;
+	margin-top: 6px;
+	margin-bottom: 6px;
+
+	padding: 6px;
+ 	border: solid 4px #d3d5dd;
+  	transition: border 0.3s;
+}
+
+.textinput:focus {
+	border: solid 4px #969696;
+}
+
+.login_input{
+}
+
+.label{
+	font-variant: all-petite-caps;
+	font-size: 20pt;
+	font-family: arial;
+	text-align: left;
+	font-weight: bolder;
+	color: #3C99B4;
+}
+
+.pass_label{
+}
+
+.submit_btn{
+	margin-top: 16px;
+    width: 266px; /* width of image */
+    height: 50px; /* height of image */
+    border: 0;
+    background-color: #E7E9EA;
+}
+
+.submit_btn:hover{
+	background-color: #c6c2c2
+}
+
+

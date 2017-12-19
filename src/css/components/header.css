@@ -1,0 +1,91 @@
+
+.header {
+	text-align: left;
+	height: 42px;
+	min-width: 112px;
+	background-color: #3C99B4;
+	display: flex;
+	width: 100%;
+	top: 0;
+}
+
+.header img{
+
+}
+
+.header .logo_text{
+	font-size: 21pt;
+	color: white;
+	margin-left: 8px;
+	font-family: sans-serif;
+	display: inline-block;
+    vertical-align: top;
+    margin-right: 8px;
+    padding: 4px;
+}
+
+.header .logo_img{
+	margin-left: 4px;
+	margin-left: 6px;
+	vertical-align: top;
+	background-color: black;
+	width: 32px;
+	height: 32px;
+}
+
+.header .profile_img{
+	vertical-align: top;
+	background-color: black;
+	width: 32px;
+	height: 32px;
+	float: right;
+}
+
+.header .content {
+	display: inline-block;
+}
+
+.expansion{
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 10px 16px;
+	text-decoration: none;
+	font-size: 16px;
+	font-variant: petite-caps;
+    font-weight: bolder;
+	font-size: 18px;
+	right: 0;
+	position: absolute;
+}
+
+
+.expansion:hover {
+	background-color: #cfd3db;
+	color: white;
+}
+
+.expansion:active {
+    background-color: yellow;
+    color: white;
+}
+
+.a_logo_text:hover{
+	background-color: #cfd3db;
+}
+
+.a_logo_text{
+	display: block;
+}
+
+.div_bg_logo:hover{
+/*	background-repeat: no-repeat;
+	background-size: 36px;
+	background-position: 12px 4px;
+	background-image: url("https://www.w3schools.com/css/searchicon.png");
+*/
+}
+
+.main_header_content_wrapper{
+	width: calc(100% - 112px);
+}

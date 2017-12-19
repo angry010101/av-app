@@ -1,0 +1,13 @@
+.photo_attachment_img_big{
+	max-width: 100%;
+}
+
+.photo_attachment_img{
+	display: inline-block;
+	margin-left: 4px;
+}
+
+.attachment_img_wrapper{
+	display: inline-block;
+	margin: 4px;
+}

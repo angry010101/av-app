@@ -1,0 +1,135 @@
+.prev_img_div{
+	display: inline-block;
+}
+
+.prev_msg_headers {
+	margin-bottom: 4px;
+	width: 100%;
+	display: inline-block;
+}
+
+.prev_msg_content {
+	display: inline-block;
+	width: calc(100% - 62px);
+	vertical-align: top;
+	margin-left: 8px;
+}
+
+
+.prev_msg_container {
+	background-color: #fcfcfc;
+	border-bottom: 1px #a6b2cc solid;
+	padding: 6px;
+	padding-left: 8px;
+}
+
+.hover_a :hover{
+	background-color: #d0e6f6;
+}
+
+.unread{
+	background-color: #d3dfe7;
+}
+
+.selected_in_menu{
+  backgroundColor: "yellow"
+}
+
+@media screen and (min-width:230px) and (max-width:808px) {
+
+
+.hover_a :hover{
+	
+}
+
+}
+
+@media screen and (min-width:36px) and (max-width:230px) {
+
+.hover_a :hover{
+	
+}
+
+
+}
+
+.prev_msg_container .photo_img{
+	width: 42px;
+	height: 42px;
+	border-radius: 25px;
+	background-position: center;
+
+	background-image: url("/images/photo_50.png");
+	border: 4px double #adadad;
+}
+
+.img_online{
+	background-color: green;
+}
+
+
+.msg {
+
+}
+
+.prev_msg_text {
+	display: inline-block;
+	font-size: 17px;
+	max-height: 58px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	vertical-align: top;
+	max-width: 100%;
+}
+
+.prev_date_text {
+	vertical-align: top;
+	font-size: 9pt;
+	margin-right: 2px;
+	float: right;
+	margin-top: 1px;
+	color: #969696;
+	min-width: 8px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+    max-width: 128px;
+    text-align: right;
+}
+
+
+.prev_name_text {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+	vertical-align: top;
+	color: #000;
+
+	min-width: 24px;
+	text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+    text-overflow: ellipsis;
+    float: left;
+    max-width: calc(100% - 96px);
+    font-weight: bold;
+}
+
+.prev_msg_end_container{
+	height: 72px;
+	text-align: center;
+}
+
+.msg_container {
+	min-width: 100%;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	display: inline-flex;
+
+	/*padding-left: 8px;
+	padding-right: 8px;
+	*/
+}
+

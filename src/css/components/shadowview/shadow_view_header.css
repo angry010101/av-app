@@ -1,0 +1,33 @@
+.shadow_view_header{
+	height: 48px;
+	width: 100%;
+	background-color: #2d2d2d;
+}
+
+.shadow_title{
+	display: inline-block;
+	height: 48px;
+	color: white;
+    font-size: 14pt;
+    padding: 12px;
+    white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: calc(100% - 82px);
+	overflow: hidden;
+}
+
+.shadow_closeBtn{
+	width: 22px;
+	height: calc(100% - 8px);
+	float: right;
+	display: inline-block;
+	font-size: 19pt;
+	text-align: center;
+	color: whitesmoke;
+	padding: 0px 12px;
+	padding-top: 8px;
+}
+
+.shadow_closeBtn:hover{
+	background-color: #656565;
+}

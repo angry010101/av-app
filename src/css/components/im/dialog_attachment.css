@@ -1,0 +1,12 @@
+.attachments_wrapper{
+	display: inline-block;
+	margin-left: 4px;
+	width: calc(100% - 22px);
+	background-color: whitesmoke;
+}
+
+.div_photoset{
+	display: inline-block;
+	vertical-align: top;
+	padding-left: 8px;
+}

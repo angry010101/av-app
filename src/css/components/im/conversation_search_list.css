@@ -1,0 +1,27 @@
+.conversation_search_main_div{
+	min-width: 338px;
+	max-width: 100%;
+}
+
+.cs_header{
+	padding: 8px;
+	background-color: #e9e9e9;
+}
+
+
+.cs_query{
+	display: block;
+	font-size: 13pt;
+	white-space: nowrap; /* Запрещаем перенос строк */
+   	overflow: hidden; /* Обрезаем все, что не помещается в область */
+    	text-overflow: ellipsis; /* Добавляем многоточие */
+}
+
+.cs_list{
+	
+}
+
+.cs_ul_list{
+	margin: 0;
+	padding: 0;
+}

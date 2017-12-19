@@ -1,0 +1,87 @@
+.profile_big_img_div{
+	width: 224px;
+	min-height: 224px;
+	max-width: 100%;
+	min-width: 224px;
+	display: inline-block;
+	background-color: green;
+	padding:12px;
+}
+
+
+.content_container{
+	width: 100%;
+	margin: 0 auto;
+	max-width: 848px;
+}
+
+.profile_big_img{
+	width: 224px;
+	height: 224px;
+	background-color: black;
+}
+
+.profile_first_content{
+}
+
+.profile_user_info_div{
+	min-height: 228px;
+	min-width: 248px;
+	padding: 12px;
+	width: calc(100% - 272px);
+	background-color: yellow;
+	vertical-align: top;
+	display: inline-block;
+}
+
+.profile_title_name{
+	font-size: 16pt;
+	font-family: arial;
+	font-variant: petite-caps;
+	font-weight: bold;
+}
+
+.profile_additional_info_div{
+	margin-top: 12px;
+	margin-left: 16px;
+}
+
+
+.profile_additional_info_ul{
+	margin-top: 0;
+	margin-left: 0;
+}
+
+.profile_status_div{
+	margin-top: 2px;
+}
+
+
+.profile_status_label{
+}
+	
+
+.profile_activity_div{
+	margin-top: 2px;
+}
+
+.profile_activity_label{
+}
+
+
+
+
+
+@media screen and (min-width:1px) and (max-width:606px) {
+
+.profile_user_info_div{
+	min-height: 228px;
+	padding: 0;
+	width: 100%;
+	background-color: yellow;
+	vertical-align: top;
+	display: inline-block;
+	text-align: center;
+}
+
+}

@@ -1,0 +1,9 @@
+.div_search_result{
+	background-color: #f9f9fc;
+	width: 100%;
+}
+
+.div_search_result ul{
+	margin: 0;
+	padding: 0;
+}
