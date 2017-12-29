@@ -23,9 +23,8 @@ class PhotoAttachment extends Component {
     dispatcher.dispatch({
       type: 'showShadowView',
       images: this.props.images,
-      currentImg: 4
+      currentImg: 0//this.props.currentImg
     })
-      
 
   }
 

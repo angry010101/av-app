@@ -18,23 +18,26 @@ class LightboxPictures extends Component {
             lightboxIsOpen: true,
             currentImage: props.currentImg
         });
-
-        this.handleClose = this.handleClose.bind(this);
-        this.gotoPrevious = this.gotoPrevious.bind(this);
-        this.gotoNext = this.gotoNext.bind(this);
-        this.closeLightbox = this.closeLightbox.bind(this);
-    }
+		
+		this.gotoNext = this.gotoNext.bind(this) 
+		this.gotoPrevious = this.gotoPrevious.bind(this) 
+	}
 
     handleClose(e){
         ShadowActions.hideShadowView();
     }
 
     componentWillMount(){
-        this.setState({
-            currentImage: this.props.currentImg
-        })
+        
     }
 
+	componentDidMount(){
+		this.setState({
+            currentImage: this.props.currentImg
+        })
+	}
+	
+	
     gotoPrevious(e){
         if (this.state.currentImage > 0){
             this.setState({

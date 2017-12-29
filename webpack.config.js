@@ -1,15 +1,20 @@
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var BUILD_DIR = path.resolve(__dirname, 'webpack-build/');
-var APP_DIR = path.resolve(__dirname, 'src/');
-
-var config = {
-  entry: APP_DIR + '/index.jsx',
+const BUILD_DIR = path.resolve(__dirname, 'webpack-build/');
+const APP_DIR = path.resolve(__dirname, 'src/');
+const PAGES_DIR = path.resolve(__dirname, 'src/js/ui/pages/'); 
+const config = {
+  entry: {
+    main:  APP_DIR + '/render_main.jsx',
+    login: APP_DIR + '/render_login.jsx'
+  },
   output: {
     path: BUILD_DIR,
-    filename: 'bundle.js'
+    filename: "[name].bundle.js"
   },
+  plugins: [new HtmlWebpackPlugin()],
   module : {
     loaders : [
       {

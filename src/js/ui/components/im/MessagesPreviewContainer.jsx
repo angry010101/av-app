@@ -26,7 +26,12 @@ class MessagesPreviewContainer extends MessagesContainer {
     startLoadingPreviewMessages();
   }
   componentWillMount(){
-    MessagesStore.on("addedPrevMessage",() =>{
+    
+  }
+
+  componentDidMount() {
+    const self = this;
+	MessagesStore.on("addedPrevMessage",() =>{
       this.setState({
           msgs: MessagesStore.getPrevMessages(),
           msgscount: MessagesStore.getPrevMessagesCount()
@@ -38,11 +43,6 @@ class MessagesPreviewContainer extends MessagesContainer {
           msgscount: MessagesStore.getPrevMessagesCount()
       });
     });
-  }
-
-  componentDidMount() {
-    const self = this;
-
    /* alert("one");
    
     $.getJSON("..jsxon/user.jsxon", .jsxon) => {

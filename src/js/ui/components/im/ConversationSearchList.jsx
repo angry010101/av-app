@@ -70,7 +70,7 @@ class ConversationSearchList extends Component {
     }
     else {
       if (i.type != "profile") return;
-      CreateChatStore.selectUser(i.uid);
+      CreateChatStore.selectUser(parseInt(i.uid));
     }
   }
 

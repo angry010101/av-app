@@ -14,14 +14,6 @@ import CreateChatContainer from 'js/ui/components/im/CreateChatContainer.jsx'
 
 
 import dispatcher from "js/backend/Dispatcher.jsx"
-
-
-import * as LPHClient from "js/backend/im/LongPollHistoryClient.jsx"
-
-
-
-//long poll history there????
-
 class Im extends Component {
   constructor(props){ 
       super(props);
@@ -35,8 +27,7 @@ class Im extends Component {
         divstyle: {},
         isCreatingChat: false,
         divheight: 0
-      })
-      //long poll client
+      });
       this.handleScrollPrev = this.handleScrollPrev.bind(this);
       this.handleScrollDlg = this.handleScrollDlg.bind(this);
       window.selectedMessages = [];
@@ -44,7 +35,7 @@ class Im extends Component {
   }
 
 
-  componentWillMount(){
+  componentDidMount(){
 
     MessagesStore.on("hideMenu",() =>{
       this.setState({

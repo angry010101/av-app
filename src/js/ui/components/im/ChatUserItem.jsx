@@ -13,7 +13,6 @@ class ChatUserItem extends Component {
     super(props);
     this.id = this.props.id;
     this.user = UsersStore.getById(this.id);
-    window.user1 = this.user;
   }
   handleChange(e){
   	e.preventDefault();
@@ -23,7 +22,6 @@ class ChatUserItem extends Component {
   hc(e){
     e.preventDefault();
     CreateChatStore.selectUser(this.id);
-    alert("asdad");
   }
  
 

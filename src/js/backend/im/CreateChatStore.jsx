@@ -29,6 +29,7 @@ class CreateChatStore extends EventEmitter{
   }
 
   selectUser(id){
+	console.log("select: " + id + "typeof" + typeof(id) ); 
   	if (this.users.indexOf(id) == -1){
   		this.addUser(id);
   	}

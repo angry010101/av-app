@@ -140,7 +140,7 @@ class SendMessagePanel extends Component {
 			<form className="form_send_msg" onsubmit="this.onSubmit;">
 				<div className="send_textarea_and_btn">
 				<div className="btn_attachments">
-					<input onChange={(e) => this.handleChangeAttachments(e)} type="file" multiple className="file_btn"/> 
+					<input onChange={(e) => this.handleChangeAttachments(e)} type="file" className="file_btn"/> 
 				</div>		
 					<textarea onKeyDown={(e) => this.keyDown(e)} 
 						 value={this.state.messageText}  

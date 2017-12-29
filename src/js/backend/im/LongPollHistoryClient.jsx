@@ -14,9 +14,9 @@ window.startLongPoll = startLongPoll;
 
 //setTimeout(function () { startLongPoll(); },3000);
 
-if (window.isLoginned == 1) {
+//if (window.isLoginned == 1) {
 	startLongPollHistory();
-}
+//}
 /*
 MessagesStore.on("startLPH",(h) =>{
     startLongPollHistory();

@@ -67,7 +67,7 @@ class CreateChatContainer extends Component {
 
 
   const listItems = numbers.map((number) =>
-        <ListItem  key={number.uid} value={number} />
+        <ListItem  key={number} value={number} />
       );
   return (
     <ul style={listyle}>

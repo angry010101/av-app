@@ -6,6 +6,8 @@ import WallAttachment from 'js/ui/components/im/WallAttachment.jsx' ;
 import AudioMessage from 'js/ui/components/im/AudioMessage.jsx' ;
 import Sticker from 'js/ui/components/im/Sticker.jsx' ;
 import Audio from 'js/ui/components/im/Audio.jsx' ;
+import Video from 'js/ui/components/im/Video.jsx' ;
+
 import DocAttachment from 'js/ui/components/im/DocAttachment.jsx' ;
 
 
@@ -19,17 +21,18 @@ class DialogAttachments extends Component {
     this.curr = 0;
     this.allPhotos = true;
     this.images = [];
-    
+	this.counter = 0;
   }
 
   select(t,c){
     switch(t.type) {
         case "photo":
+		this.counter = this.counter + 1;
           if (this.count == 1){   
             return <PhotoAttachment images={this.images} info={this.props.info[0].photo} isbig="1"/>;
           }
           else {
-            return <PhotoAttachment images={this.images} info={t.photo} isbig="0"/>
+            return <PhotoAttachment images={this.images} currentImg={this.counter - 1} info={t.photo} isbig="0"/>
           }
         case "wall":
           return <WallAttachment info={t.wall}/>
@@ -44,6 +47,8 @@ class DialogAttachments extends Component {
           return <Sticker info={t.sticker} />
         case "audio":
           return <Audio info={t.audio} />
+		case "video":
+			return <Video info={t.video} />
         default:
           return ""
       }
