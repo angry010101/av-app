@@ -14,7 +14,6 @@ export function startLongPollHistory(){
             .send({ max_msg_id: window.lastMsgId, new_pts: window.newPts})
             .end((err, res) => {
               if (err || !res.ok) {
-                 alert(err);
               } else {
                 var j;
                 try {

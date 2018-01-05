@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import 'css/components/nav_menu.css';
+import 'css/components/audio.css';
 
 import HeaderHandleActions from 'js/backend/HeaderHandleActions.jsx'
 import * as HeaderActions from 'js/backend/HeaderActions.jsx'
@@ -10,9 +10,11 @@ class Audio extends Component {
   render() {
     var i = this.props.info;
     return (
-      <div class="audio_attachment_wrapper">
-  	     <span>{ i.title }</span>
-         <span>{ i.artist }</span>
+      <div className="audio_attachment_wrapper">
+         <div className="audio_attachment_headers">
+			<div className="audio_attachment_artist">{ i.artist }</div>
+			<div className="audio_attachment_title">{ i.title }</div>
+		 </div>
          <audio controls>
           <source src={i.url} type="audio/mpeg"/>
           <source src={i.url} type="audio/ogg"/>

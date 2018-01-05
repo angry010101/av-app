@@ -6,6 +6,11 @@ import SendMessagePanel from 'js/ui/components/im/SendMessagePanel.jsx'
 import MessagesStore from 'js/backend/im/MessagesStore.jsx'
 import ConversationSearch from 'js/ui/components/im/ConversationSearch.jsx'
 import ConversationSearchList from 'js/ui/components/im/ConversationSearchList.jsx'
+
+
+import RemoveChatUsersList from 'js/ui/components/im/RemoveChatUsersList.jsx'
+
+
 import ConversationTools from 'js/ui/components/im/ConversationTools.jsx'
 import SearchDialogStore from 'js/backend/im/SearchDialogStore.jsx'
 import { startLoadingDialogMessages } from 'js/backend/im/LoadDialogMessages.jsx'
@@ -26,7 +31,12 @@ class Im extends Component {
         isSelectedMessages: 0,
         divstyle: {},
         isCreatingChat: false,
-        divheight: 0
+        divheight: 0,
+		
+		isAddingUserToChat: false,
+		isRemovingUsersFromChat: false,
+		
+		currentChatUsers: []
       });
       this.handleScrollPrev = this.handleScrollPrev.bind(this);
       this.handleScrollDlg = this.handleScrollDlg.bind(this);
@@ -60,6 +70,13 @@ class Im extends Component {
           isSelectedMessages: 0
       });
     });
+	
+	MessagesStore.on("loaded_chat_users",(u) =>{
+      this.setState({
+          isRemovingUsersFromChat: true
+      });
+    });
+	
 
      dispatcher.register( dispatch => {
         if ( dispatch.type === 'HIDE_BACK_BTN' ) {
@@ -102,6 +119,24 @@ class Im extends Component {
           });
         }
       });
+	  
+	  dispatcher.register( dispatch => {
+        if (dispatch.type === 'ADDING_CHAT_USER'){
+          this.setState({
+            isAddingUserToChat: dispatch.adding 
+          });
+        }
+      });
+	  dispatcher.register( dispatch => {
+        if (dispatch.type === 'REMOVING_CHAT_USER'){
+			if (dispatch.removing == false){
+				this.setState({currentChatUsers: []});
+			}
+          this.setState({
+            isRemovingUsersFromChat: dispatch.removing
+          });
+        }
+      });
       
       SearchDialogStore.on("SEARCH_DIALOG_STARTED",(h) =>{
        this.setState({
@@ -141,20 +176,34 @@ class Im extends Component {
     	<div className="main_im_div" >
           
       		<div className="content">
-            <div className="container left"> 
-            {/*  <ConversationTools /> */}
-              <ConversationSearch />
-				      <div className="container_previev_messages"  id="prev_msg_container"  onScroll={this.handleScrollPrev}>
-					     { 
-               
-                (this.state.isCreatingChat) ?
-                <ConversationSearchList isCreatingChat={this.state.isCreatingChat} isChatContainer={0} />
-                : 
-                (this.state.conversationSearchQuery == "") ?
-               <MessagesPreviewContainer />
-               : <ConversationSearchList /> 
-
-               }
+            <div className="container left">
+				{
+				(!this.state.isRemovingUsersFromChat) ? 
+					<ConversationSearch /> : ""
+				}
+				<div className="container_previev_messages"  id="prev_msg_container"  onScroll={this.handleScrollPrev}>
+					{
+				    (this.state.isCreatingChat || this.state.isAddingUserToChat) ?
+						<ConversationSearchList isCreatingChat={this.state.isCreatingChat} addingChatUsers={this.state.isAddingUserToChat} isChatContainer={0} />
+						: "" 
+						
+					}
+						
+					{
+					(this.state.isRemovingUsersFromChat) ? 
+						<RemoveChatUsersList users={this.state.currentChatUsers}/>: <div></div> 
+					}
+					
+					{
+					(this.state.conversationSearchQuery != "" && !this.state.isCreatingChat) ?
+						<ConversationSearchList /> : " "
+					}
+					
+					{
+					(this.state.conversationSearchQuery == "" && !this.state.isRemovingUsersFromChat && !this.state.isCreatingChat && !this.state.isAddingUserToChat) ?
+					   <MessagesPreviewContainer /> : "" 
+					   
+					}
               </div>
             </div>
               

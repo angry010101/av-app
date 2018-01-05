@@ -16,7 +16,10 @@ class MessagesStore extends EventEmitter{
 		this.users = [],
 		this.groups = [],
 
-
+		this.flagAddUserToChat = false;
+		
+		this.chatUsers =[];
+		
 		this.me = [{"uid": 156867806, "first_name": "\u0421\u0435\u043c\u0435\u043d", "last_name": "\u042f\u043a\u0438\u043c\u043e\u0432\u0438\u0447", "photo_50": "https://pp.userapi.com/c627224/v627224806/44693/zTYGXOjKFVk.jpg"}
 		],
 		this.userstoadd = [],
@@ -29,7 +32,7 @@ class MessagesStore extends EventEmitter{
 		this.conversationSearchResult = [],
 		this.selectedConversation = {
 			uid: 0,
-			isChat: 0,
+			chat_id: 0,
 			offset: 0
 		},
 
@@ -42,6 +45,13 @@ class MessagesStore extends EventEmitter{
 
 	}
 
+	isAddingUserToChat(){
+		return flagAddUserToChat;
+	}
+	changeFlagAddChatUser(b){
+		this.flagAddUserToChat = b;
+	}
+	
 	startLPH(){
 		if (typeof this.prevMsgs[0] != "undefined" && window.lastMsgId == 0){
             window.lastMsgId = this.prevMsgs[0].mid;
@@ -390,6 +400,118 @@ class MessagesStore extends EventEmitter{
 
 	}
 	
+	dialogAttachmentsRequest(m,o){
+		window.att_method = m;
+		let p = this.selectedConversation.uid;
+		if (this.selectedConversation.chat_id > 0){
+			p = 2000000000 + parseInt(this.selectedConversation.chat_id)
+		}
+		
+		request.post('/getattachments')
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+            .send({ method: m, pid: p, offset: window.att_offset})
+            .end((err, res) => {
+              if (err || !res.ok) {
+                 alert(err);
+              } else {
+                var j;
+                try {
+                 j = JSON.parse(res.text);
+                }
+                catch(ec){
+                  alert("ErrorLoading response: " + res.text);
+                }
+                try{
+					
+					let b = [];
+						let i=1;
+						while(typeof j[i] != "undefined") {
+							b.push(j[i]);
+						i++;
+					}
+		
+				  this.emit("dialogAttachmentsResponse",b);
+				  window.att_offset = j.next_from;
+				  window.startedLoadingMoreDlgsAtt = false;
+                }
+                catch (ec){
+                  
+                }
+              }
+            });   
+	}
+	
+	chatAction(m,t,cb){
+		
+		request.post('/chatAction')
+            .set('Content-Type', 'application/x-www-form-urlencoded')
+            .send({ method: m, cid: this.selectedConversation.chat_id, param: t})
+            .end((err, res) => {
+              if (err || !res.ok) {
+                 alert(err);
+              } else {
+                var j;
+                try {
+                 j = JSON.parse(res.text);
+                }
+                catch(ec){
+                  alert("ErrorLoading response: " + res.text);
+                }
+                try{
+					if (cb){
+						cb();
+					}
+					if (m == "get_users"){
+						this.addUsers(j);
+						this.emit("loaded_chat_users",j);
+						
+					}
+					else {					
+						alert("success changing title to" + t);
+						window.test_ca = j; 
+					}
+                }
+					
+                catch (ec){
+                  
+                }
+              }
+            });   	
+	}
+	
+	addChatUser(){
+		this.flagAddUserToChat = true;
+	}
+	cancelAddingUser(){
+		this.flagAddUserToChat = false;
+	}
+	
+	addUserToChat(id){
+		this.chatAction("add_user",id);
+	}
+	
+	parseLPResponse(t){
+		let ts = t.ts;
+		window.newPts = ts;
+		let updates = t.updates;
+		updates.map((e) => {
+			switch(e[0]){
+				case 8:
+					alert(8);
+					break;
+				case 9: 
+					alert(9);
+					break;
+				case 4:
+					alert("message");
+					break;
+				default:
+					return;
+		}
+		}) ;
+	}
+
+	
 	handleActions(a){
 		switch(a.type){
 			case "SELECT_DIALOG":
@@ -410,6 +532,16 @@ class MessagesStore extends EventEmitter{
 				break;
 			case "LOADED_GROUP":
 				this.addGroup(a.r);
+				break;
+			case "LOAD_DIALOG_ATTACHMENTS":
+				this.dialogAttachmentsRequest(a.method);
+				break;
+			case "CHANGE_CHAT_TITLE":
+				this.chatAction("change_title",a.t);
+				break;
+			case "REMOVING_CHAT_USER":
+				if (!a.removing) return ;
+				this.chatAction("get_users",0);
 				break;
 			default:
 			break;

@@ -115,7 +115,7 @@ class DialogMessage extends Component {
                 <div className="msg_text">
 
                   { 
-                    (this.state.body != "") ?
+                    (typeof this.state.body != "undefined" && this.state.body != "" ) ?
                     this.state.body.split("<br>").map(function(item) {
                      return (
                       <div>

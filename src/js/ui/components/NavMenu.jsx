@@ -24,7 +24,7 @@ class NavMenu extends Component {
   		<a onClick={this.handleSelect.bind(this)} href="/logout">Logout</a>
     */}
       <a onClick={this.handleSelect.bind(this)} href="/im">Conversations</a>
-      <a onClick={this.handleSelect.bind(this)} href="/news">News</a>
+	{/*<a onClick={this.handleSelect.bind(this)} href="/news">News</a>*/}
       <a onClick={this.handleSelect.bind(this)} href="/logout">Logout</a>
       </div>
     );

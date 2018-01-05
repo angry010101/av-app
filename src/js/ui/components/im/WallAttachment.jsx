@@ -23,6 +23,7 @@ class WallAttachment extends Component {
   render() {
     return (
       <div className="wall_attachment_wrapper">
+		<div className="wall_attachment_label">Wall post</div>
         <span className="wall_attachment_title">
         {this.props.info.text}
         </span>

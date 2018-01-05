@@ -55,23 +55,28 @@ class ConversationSearchList extends Component {
 
   hc(e,i){
     e.preventDefault();
-    if (!this.props.isCreatingChat){
-      switch(i.type){
-        case "chat":
-          MsgActions.selectDialog(i.chat_id,1);//id, ischat
-          break;
-        case "profile":
-          MsgActions.selectDialog(i.uid,0);//id, ischat
-          break;
-        default:
-          break;    
-      }
-      MsgActions.showBackBtn();
-    }
-    else {
-      if (i.type != "profile") return;
-      CreateChatStore.selectUser(parseInt(i.uid));
-    }
+	if (!this.props.addingChatUsers){
+		if (!this.props.isCreatingChat){
+		  switch(i.type){
+			case "chat":
+			  MsgActions.selectDialog(i.chat_id,1);//id, ischat
+			  break;
+			case "profile":
+			  MsgActions.selectDialog(i.uid,0);//id, ischat
+			  break;
+			default:
+			  break;    
+		  }
+		  MsgActions.showBackBtn();
+		}
+		else {
+		  if (i.type != "profile") return;
+		  CreateChatStore.selectUser(parseInt(i.uid));
+		}
+	}
+	else {
+		MessagesStore.addUserToChat(i.uid);
+	}
   }
 
 

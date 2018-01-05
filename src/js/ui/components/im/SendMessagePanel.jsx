@@ -10,6 +10,15 @@ import * as SendMessage from 'js/backend/im/SendMessage.jsx'
 
 window.photo_id = "";
 
+var DataTransfer = require('fbjs/lib/DataTransfer');
+
+
+const divSpace = {
+  width: '32px',
+  height: '32px',
+  display: 'inline-block'
+};
+
 class SendMessagePanel extends Component {
 	constructor(props){
 		super(props);
@@ -85,11 +94,19 @@ class SendMessagePanel extends Component {
     	}
 	}
 
-	handleChangeAttachments(e){
-		var files = e.target.files;
+	handleChangeAttachments(e,a){
+		window.photo_id = "";
+		var files
+		if (a == "paste") {
+			files = e;
+		}
+		else {
+			window.test_a = a;
+			files = e.target.files;
+		}
 		for (var i=0;i<files.length;i++ )
 		request.post('/file_upload')
-		  	.attach('upload_file', e.target.files[i])
+		  	.attach('upload_file', 	files[i])
 		  	.field('caption', 'My cats')	
             .end((err, res)=>{
               if (err || !res.ok) {
@@ -104,8 +121,8 @@ class SendMessagePanel extends Component {
                  	alert("err");
                  	return;
                  }
-                 if (window.photo_id != "" && typeof window.photo_id != "undefined" && window.photo_id) 
-                 			window.photo_id += ", ";
+                /* if (window.photo_id != "" && typeof window.photo_id != "undefined" && window.photo_id) 
+                 			window.photo_id += ", ";*/
                  if (typeof j[0].id == "undefined"){
                  	
                  	 window.photo_id = "doc" + j[0].owner_id + "_" + j[0].did ; 
@@ -131,17 +148,29 @@ class SendMessagePanel extends Component {
 
 
 	paste(e){
+		var data = new DataTransfer(e.clipboardData);
+		var text = data.getText();
+		var html = data.getHTML();
+		var files = data.getFiles();
 		
-  
+		window.test_files = files;
+		if (typeof files != "undefined" && files.length > 0){
+			this.handleChangeAttachments(files,"paste");	
+		}
 	}
+	
+	
   render() {
     return (
     	<div className="send_msg_block" id="sendMsgBlock" ref="smb">
 			<form className="form_send_msg" onsubmit="this.onSubmit;">
 				<div className="send_textarea_and_btn">
+				{ 
+				(!this.props.isCreatingChat) ? 
 				<div className="btn_attachments">
 					<input onChange={(e) => this.handleChangeAttachments(e)} type="file" className="file_btn"/> 
-				</div>		
+				</div>	: <div style={divSpace}></div>
+				}
 					<textarea onKeyDown={(e) => this.keyDown(e)} 
 						 value={this.state.messageText}  
 						 onChange={(e) => this.autoGrow(e)} 

@@ -1,0 +1,40 @@
+.doc_attachment_wrapper{
+	
+}
+
+.doc_attachment_wrapper div{
+	display: inline-block;
+	display: inline-block;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.doc_attachment_wrapper a{
+	display: inline-block;
+}
+
+.doc_attachment_title{
+	width: 40%;
+	min-width: 120px;
+}
+
+.doc_attachment_ext{
+	min-width: 48px;
+	width: 5%;
+}
+
+.doc_attachment_date{
+	min-width: 88px;
+	width: 20%;
+}
+
+.doc_attachment_size{
+	min-width: 96px;
+	width: 15%;
+}
+
+.doc_attachment_link{
+	min-width: 62px;
+	width: 10%;
+}

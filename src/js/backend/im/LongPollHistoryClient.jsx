@@ -11,11 +11,11 @@ window.timeLP = 1000;
 window.newPts = 0;
 window.lastMsgId = 0;
 window.startLongPoll = startLongPoll; 
+window.startLongPollHistory = startLongPollHistory; 
 
 //setTimeout(function () { startLongPoll(); },3000);
 
 //if (window.isLoginned == 1) {
-	startLongPollHistory();
 //}
 /*
 MessagesStore.on("startLPH",(h) =>{

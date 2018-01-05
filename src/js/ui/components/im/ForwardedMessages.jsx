@@ -42,7 +42,6 @@ class ForwardedMessages extends Component {
     return (
       <div >
         {
-
           this.props.info.map((e) => this.prepareMessage(e))
         }
       </div>

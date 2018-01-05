@@ -1,0 +1,27 @@
+.video_attachment_headers{
+	margin-left: 8px;
+	font-size: 14px;
+	margin-bottom: 4px;
+}
+
+.video_attachment_duration{
+	display: inline-block;
+}
+
+.video_attachment_title{
+	display: inline-block;
+}
+
+.video_attachment_space{
+	display: inline-block;
+	width: 28px;
+}
+
+.video_attachment_wrapper{
+	margin-left: 8px;
+	margin-top: 6px;
+}
+
+.video_attachment_label{
+	font-size: larger;
+}

@@ -24,7 +24,7 @@ class DialogAttachments extends Component {
 	this.counter = 0;
   }
 
-  select(t,c){
+  select(t,c){ 
     switch(t.type) {
         case "photo":
 		this.counter = this.counter + 1;
@@ -52,6 +52,7 @@ class DialogAttachments extends Component {
         default:
           return ""
       }
+	 
   }
 
   componentWillMount(){
@@ -105,7 +106,7 @@ class DialogAttachments extends Component {
 
     return (
       <div className="attachments_wrapper">
-     
+		
         {
           (this.props.info[0].type == "photo" && this.props.info.length == 1) ?
             this.bigPic()

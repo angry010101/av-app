@@ -6,6 +6,9 @@ import MessagesStore from 'js/backend/im/MessagesStore.jsx'
 import UsersStore from 'js/backend/im/UsersStore.jsx'
 import { startLoadingDialogMessages } from 'js/backend/im/LoadDialogMessages.jsx'
 
+import DialogAttachments from 'js/ui/components/im/DialogAttachments.jsx' ;
+
+import dispatcher from "js/backend/Dispatcher.jsx"
 
 const emptyMessagesDiv = (<div className="empty_messages_div"><a>it is empty and cold</a></div>);
 
@@ -26,7 +29,8 @@ class DialogContainer extends Component {
       super(props);
       this.state=({
         dialogmsgs: MessagesStore.getDlgMessages(),
-        selectedMessages: MessagesStore.getSelectedMessages()
+        selectedMessages: MessagesStore.getSelectedMessages(),
+		dialogAttachments: []
       })
     }
     
@@ -65,17 +69,32 @@ class DialogContainer extends Component {
             dialogmsgscount: MessagesStore.getDlgMessagesCount()
          });
       }); 
+	  
 
+	 
+		MessagesStore.on("dialogAttachmentsResponse",(data) =>{
+			
+			this.setState({
+				dialogAttachments: this.state.dialogAttachments.concat(data)
+			});
+			if (typeof data[1] == "undefined") alert("There's no " + window.att_method + "s there");
+		});
 
-      /*dispatcher.register( dispatch => {
-        if (dispatch.type === 'MESSAGES_DELETED'){
-          MessagesStore.markAsDeleted(dispatch.m,dispatch.fl);          
+      dispatcher.register( dispatch => {
+        if (dispatch.type === 'CLEAR_ATTACHMENTS'){
+          this.setState({
+			dialogAttachments: []
+		  })        
         }
-      }); */
+      });
     }
 
+	componentDidMount(){
+	  
+		
+	}
     MessagesContainerFun(props) {
-      const count = 0;//??? 
+		const count = 0;//??? 
       const msgs = this.state.dialogmsgs;
       var users =  UsersStore.get();
       const me = UsersStore.getMe();
@@ -83,6 +102,7 @@ class DialogContainer extends Component {
       const listItems = msgs.map((message) =>
          <ListItem value={message} user={(message.out === 1) ? me[0] : users.find(u => u.uid === message.uid)} users={users}/>
       );
+	  
 
       //MessagesStore.loadUsers();
       return (
@@ -91,11 +111,35 @@ class DialogContainer extends Component {
             { listItems }
           </ul>
         </div>
-      );
-}
+		);
+	}
+	  
+	 emptyDiv(t){
+		return (<div className="empty_messages_div"><a>There's no {t}s there</a></div>);
+	 }
+	 
+	 
+	dialogAttachmentsFun(props) {
+		var data =  this.state.dialogAttachments;
+      const a = data;
+	  
+	  if (typeof a[1] == "undefined") return this.emptyDiv(window.att_method);
+		  
+	  return <div><DialogAttachments info={a}/>
+		  <a onClick={(e) => startLoadingDialogMessages()}>Load more</a></div>
+	}
+	
+	getRender(){
+	if (typeof this.state.dialogAttachments[1] != "undefined" )
+		{ return this.dialogAttachmentsFun(); }
+	else {
+      return this.MessagesContainerFun(); 
+	}
+	}
+	
  
     render() {
-      return this.MessagesContainerFun(); 
+		return this.getRender();
     }
 }
 

@@ -1,19 +1,9 @@
 import React, { Component } from 'react';
-/*
-import ProfileImage from '/home/angry/av-app/src.jsx/ui/components/images/ProfileImage.jsx'
-import Logo from '/home/angry/av-app/src.jsx/ui/components/images/Logo.jsx'
-*/
-
-import MainHeaderContent from 'js/ui/components/MainHeaderContent.jsx'
-
-import ImExpansion from 'js/ui/components/im/ImExpansion.jsx'
 import SearchInput from 'js/ui/components/SearchInput.jsx'
-import HeaderActions from 'js/backend/HeaderActions.jsx'
 
 import 'css/components/header.css';
 
-
-class Header extends Component {
+class HeaderLogin extends Component {
     constructor(){
         super();
         this.state=({
@@ -47,10 +37,12 @@ class Header extends Component {
     }
 
     showSearch(e){
-		//to work uncomment
-        /*this.setState({
+		//to owrk uncomment
+		/*
+        this.setState({
             showSearch: !this.state.showSearch
-        });*/
+        });
+		*/
     }
 
     onInpOver(e){
@@ -90,16 +82,10 @@ class Header extends Component {
                         <a onClick={this.showSearch.bind(this)} className="click_search_icon"></a>
                         </div>
                 }
-
-                <div style={hideButtonWhenSearch} className="main_header_content_wrapper">
-                    <MainHeaderContent hideBtn={this.props.hideBtn} navMenuEnabled={this.props.navMenuEnabled} />
-                </div>
-                <a onClick={(e) => this.expClick(e)} class="expansion">...</a>  
-                 <div style={this.state.showExp}><ImExpansion /></div>
             </div>
     );
   }
 }
 
 
-export default Header;
+export default HeaderLogin;

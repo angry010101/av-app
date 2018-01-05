@@ -11,6 +11,12 @@ import MessagesStore from 'js/backend/im/MessagesStore.jsx'
 const styleUnread={
   backgroundColor: "#bcd0ff"
 };
+
+
+const styleUnreadInter={
+  backgroundColor: "#bcd0ff"
+};
+
 const styleOnline={
   backgroundColor: "green"
 };
@@ -92,11 +98,11 @@ class Message extends Component {
 
   render() {
     let styleContainer = (this.state.read_state == 0 && this.state.out == 1) ? "prev_msg_content  unread" : "prev_msg_content";
-    styleContainer = (this.state.selectedInMenu) ? "prev_msg_content selected_in_menu": "prev_msg_content"
+    //styleContainer = (this.state.selectedInMenu) ? "prev_msg_content selected_in_menu": "prev_msg_content"
     return (
       <div >
       <a className="hover_a" onClick={(e) => this.handleClick(e)} > 
-      <div style={(this.state.selectedInMenu) ? styleSelected : style1 } className={(this.state.read_state == 0 && this.state.out == 0) ? "prev_msg_container  unread" : "prev_msg_container"} ref="myInput" key="{this.state.mid}">
+      <div style={(this.state.selectedInMenu) ? styleSelected : style1 } className={(this.state.read_state == 0 && this.state.out == 0) ?  "prev_msg_container unread" : "prev_msg_container"} ref="myInput" key="{this.state.mid}">
 
         <div className="prev_msg_headers">
           <div className="prev_name_text">
@@ -121,7 +127,7 @@ class Message extends Component {
           />
         </div>
       	<div className={ styleContainer } >
-      		<div className="prev_msg_text">
+      		<div className={"prev_msg_text"}>
             { (this.state.out == 1) ? 
               "You: " : (typeof this.state.chat_id != 'undefined') 
               ? this.state.user.first_name + " " + this.state.user.last_name + ": " : "" } 

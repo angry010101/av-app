@@ -10,15 +10,26 @@ const request = require('superagent');
 var startedLoadingMoreDlgs = false;
 
 export function startLoadingDialogMessages(){
-    if (startedLoadingMoreDlgs) return;
     
+	
+	
+	if (typeof window.att_offset != "undefined" && window.att_offset != "" ) {
+		if (window.startedLoadingMoreDlgsAtt ) {
+			
+		return
+		} 
+		loadAttachments();
+		return ;
+	}
+    if (startedLoadingMoreDlgs) return;
+    startedLoadingMoreDlgs = true;
+	
     var sc = MessagesStore.getSelectedConversation(); 
-    var uidr =    sc.uid  
+    var uidr =  sc.uid  
     if (sc.chat_id > 0){
       uidr = parseInt(sc.chat_id) + 2000000000;
     }
 
-    startedLoadingMoreDlgs = true;
     request.post('/getmsg')
             .set('Content-Type', 'application/x-www-form-urlencoded')
             .send({ offset: window.dlgsOffset, isChat: sc.chat_id, uid: uidr})
@@ -36,4 +47,9 @@ export function startLoadingDialogMessages(){
                  window.dlgsOffset += 20;
               }
             });      
+}
+
+function loadAttachments(){
+	window.startedLoadingMoreDlgsAtt = true;
+	MessagesStore.dialogAttachmentsRequest(window.att_method);
 }
