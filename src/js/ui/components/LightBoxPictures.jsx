@@ -18,9 +18,8 @@ class LightboxPictures extends Component {
             lightboxIsOpen: true,
             currentImage: props.currentImg
         });
+		 
 		
-		this.gotoNext = this.gotoNext.bind(this) 
-		this.gotoPrevious = this.gotoPrevious.bind(this) 
 	}
 
     handleClose(e){
@@ -32,25 +31,19 @@ class LightboxPictures extends Component {
     }
 
 	componentDidMount(){
-		this.setState({
-            currentImage: this.props.currentImg
-        })
+		
 	}
 	
 	
     gotoPrevious(e){
-        if (this.state.currentImage > 0){
-            this.setState({
-                currentImage: this.state.currentImage-1
-            });
+        if (this.props.currentImg > 0){
+            this.props.changeImage(this.props.currentImg-1);
         }
     }
 
     gotoNext(e){
-        if (this.state.currentImage <= this.props.images.length){
-            this.setState({
-                currentImage: this.state.currentImage+1
-            });
+		if (this.props.currentImg <= this.props.images.length){
+            this.props.changeImage(this.props.currentImg+1)
         }
     }
 
@@ -61,13 +54,14 @@ class LightboxPictures extends Component {
     }
 
     render() {
-        return (
+		this.cimg = this.props.currentImg
+		return (
             <Lightbox
                 images={this.props.images}
                 isOpen={this.props.show}
-                onClickPrev={this.gotoPrevious}
-                onClickNext={this.gotoNext}
-                currentImage={this.state.currentImage}
+                onClickPrev={(e) => this.gotoPrevious(e)}
+                onClickNext={(e) => this.gotoNext(e)}
+                currentImage={this.cimg}
                 onClose={this.closeLightbox}
              />
         );

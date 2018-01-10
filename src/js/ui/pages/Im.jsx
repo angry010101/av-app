@@ -7,6 +7,7 @@ import MessagesStore from 'js/backend/im/MessagesStore.jsx'
 import ConversationSearch from 'js/ui/components/im/ConversationSearch.jsx'
 import ConversationSearchList from 'js/ui/components/im/ConversationSearchList.jsx'
 
+import * as MsgActions from 'js/backend/im/MsgActions.jsx'
 
 import RemoveChatUsersList from 'js/ui/components/im/RemoveChatUsersList.jsx'
 
@@ -16,6 +17,16 @@ import SearchDialogStore from 'js/backend/im/SearchDialogStore.jsx'
 import { startLoadingDialogMessages } from 'js/backend/im/LoadDialogMessages.jsx'
 import { startLoadingPreviewMessages } from 'js/backend/im/LoadPreviewMessages.jsx'
 import CreateChatContainer from 'js/ui/components/im/CreateChatContainer.jsx'
+
+const progressLink = "http://qwertyangry.pythonanywhere.com/static/images/circle-loading.gif";
+const progressStyle = {
+	"margin-top": "8%",
+	"width": "48px",
+	"height": "48px"
+}
+const progressDiv = {
+	"text-align": "center"
+}
 
 
 import dispatcher from "js/backend/Dispatcher.jsx"
@@ -36,7 +47,10 @@ class Im extends Component {
 		isAddingUserToChat: false,
 		isRemovingUsersFromChat: false,
 		
-		currentChatUsers: []
+		currentChatUsers: [],
+		showSendMessagePanel: false,
+		showProgress: false,
+		selected_first_dialog: false
       });
       this.handleScrollPrev = this.handleScrollPrev.bind(this);
       this.handleScrollDlg = this.handleScrollDlg.bind(this);
@@ -77,10 +91,32 @@ class Im extends Component {
       });
     });
 	
+	MessagesStore.on("addedDlgMessages",() =>{
+      this.setState({
+          showProgress: false
+      });
+    });
 
+	
+
+	dispatcher.register( dispatch => {
+        if ( dispatch.type === 'SHOW_PROGRESS' ) {
+          this.setState({ showProgress: true })
+        }
+      });
+	  
+	  dispatcher.register( dispatch => {
+        if ( dispatch.type === 'HIDE_PROGRESS' ) {
+          this.setState({ showProgress: false })
+        }
+      });
+	  
      dispatcher.register( dispatch => {
         if ( dispatch.type === 'HIDE_BACK_BTN' ) {
           this.setState({ hideMenu: false })
+		  if (this.state.isCreatingChat){
+				//cancel creating chat
+		  }
         }
       });
 
@@ -92,6 +128,11 @@ class Im extends Component {
 
      dispatcher.register( dispatch => {
         if (dispatch.type === 'SELECT_DIALOG'){
+			this.setState({
+				showSendMessagePanel: true,
+				showProgress: true,
+				selected_first_dialog: true
+			});
           if (this.state.isSelectedMessages > 0)
             this.setState({
               selectedConversation: MessagesStore.getSelectedConversation()})
@@ -99,7 +140,6 @@ class Im extends Component {
             this.setState({ isSelectedMessages: 0,
               selectedConversation: MessagesStore.getSelectedConversation()})
         }
-
       }); 
 
       /*dispatcher.register( dispatch => {
@@ -114,6 +154,11 @@ class Im extends Component {
       });*/   
       dispatcher.register( dispatch => {
         if (dispatch.type === 'CREATE_CHAT'){
+			if (!this.state.selected_first_dialog && !dispatch.chatState) {
+				this.setState({
+					showSendMessagePanel: false
+				});				
+			}
           this.setState({
             isCreatingChat: dispatch.chatState
           });
@@ -160,10 +205,16 @@ class Im extends Component {
   handleScrollPrev(e){
       var myDiv = document.getElementById("prev_msg_container");
       if (myDiv.offsetHeight + myDiv.scrollTop >= myDiv.scrollHeight - 100) {
-          startLoadingPreviewMessages();      
+         if (!this.state.isCreatingChat && !this.state.isAddingUserToChat && !this.state.isRemovingUsersFromChat && this.state.conversationSearchQuery == "") startLoadingPreviewMessages();      
       }              
   }
   
+  
+	showProgress(){
+		return (<div style={progressDiv} className={(!this.state.hideMenu) ? 'container right' : 'container right hide'} id="cRight"> 
+				<img src={progressLink} style={progressStyle} /></div>);	 
+	}
+	 
   handleScrollDlg(e){ 
       var myDiv = document.getElementById("dialog_container_div");
       if (myDiv.offsetHeight + myDiv.scrollTop >= myDiv.scrollHeight - 100) {
@@ -174,7 +225,6 @@ class Im extends Component {
   render() {
     return (
     	<div className="main_im_div" >
-          
       		<div className="content">
             <div className="container left">
 				{
@@ -204,11 +254,14 @@ class Im extends Component {
 					   <MessagesPreviewContainer /> : "" 
 					   
 					}
+					
+					
               </div>
             </div>
-              
-            
+			{
+            (!this.state.showProgress) ?
             <div className={(!this.state.hideMenu) ? 'container right' : 'container right hide'} id="cRight">
+			
               <div style={this.state.divstyle}  onScroll={this.handleScrollDlg} id="dialog_container_div" className="dialog_container_div">
               { (!this.state.isCreatingChat) ? 
                 <DialogContainer />
@@ -221,15 +274,13 @@ class Im extends Component {
                 }
 
               </div>
+			  {
+			  (this.state.showSendMessagePanel) ?
               <div className="im_panel">
                   <SendMessagePanel isCreatingChat={this.state.isCreatingChat} setHeight={this.setHeight} attachments="" selectedMessages={this.state.isSelectedMessages} /> 
-              </div> 
-
-               {
-                (this.state.isCreatingChat) ? 
-                  "" : ""
-                }
-            </div>
+              </div> : "" 
+				}
+				</div> : this.showProgress() }
 			     
          </div>
       </div>

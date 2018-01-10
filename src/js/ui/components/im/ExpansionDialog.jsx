@@ -9,6 +9,51 @@ import dispatcher from "js/backend/Dispatcher.jsx"
 import * as SD from 'js/backend/im/SearchDialog.jsx'
 
 
+
+
+
+import LocalizedStrings from 'react-localization';
+ 
+let strings = new LocalizedStrings({
+ en:{
+   documents: "Documents",
+   photos: "Photos",
+   videos: "Videos",
+   return_to_conversation: "Back to conversation",
+   change_title: "Change chat title",
+   
+   add_users: "Add users to chat",
+   cancel_adding_users: "Cancel adding users to chat",
+   remove_users: "Remove users from chat",
+   cancel_removing_users: "cancel removing users from chat"
+ },
+ ua: {
+   documents: "Документи",
+   photos: "Старі фотографії",
+   videos: "Відеозаписи",
+   return_to_conversation: "Повернутися до діалогу",
+   change_title: "Змінити назву бесіди",
+   
+   add_users: "Додати користувачів",
+   cancel_adding_users: "Припинити додавати користувачів",
+   remove_users: "Видалити з бесіди",
+   cancel_removing_users: "Припинити видалення з бесіди"
+ },
+ ru: {
+   documents: "Документи",
+   photos: "Фото",
+   videos: "Видео",
+   return_to_conversation: "Вернуться к беседе",
+   change_title: "Изменить название беседы",
+   
+   add_users: "Добавить пользователя",
+   cancel_adding_users: "Прекратить добавлять пользователей",
+   remove_users: "Удалить из беседы",
+   cancel_removing_users: "Прекратить удаление с беседы"
+ }
+});
+
+
 class ExpansionDialog extends Component {
     constructor(props){
         super(props);
@@ -86,28 +131,32 @@ class ExpansionDialog extends Component {
             <div>
               <ul>
 			  { (this.state.selectedConversation.uid > 0 || this.state.selectedConversation.chat_id > 0) ? 
-                <div><li><a onClick={(e) => this.handleClick(e,"doc")}>Documents</a></li>
-                <li><a onClick={(e) => this.handleClick(e,"photos")}>Photos</a></li>
-                <li><a onClick={(e) => this.handleClick(e,"videos")}>Videos</a></li>
-				<li><a onClick={(e) => this.handleClick(e,"back")}>Back to conversation</a></li>
+                <div><li><a onClick={(e) => this.handleClick(e,"doc")}>{strings.documents}</a></li>
+                <li><a onClick={(e) => this.handleClick(e,"photos")}>{strings.photos}</a></li>
+                <li><a onClick={(e) => this.handleClick(e,"videos")}>{strings.videos}</a></li>
+				<li><a onClick={(e) => this.handleClick(e,"back")}>{strings.return_to_conversation}</a></li>
 					</div> : ""
 			  }
 				{
 					(this.state.selectedConversation.chat_id > 0) ? 
 						<div>
-						{(!this.state.isAddingChatUser) ? 
-						<li><a onClick={(e) => this.handleClick(e,"chat_add_user")}>Add users</a></li>
-						: 
-						<li><a onClick={(e) => this.handleClick(e,"chat_add_user_cancel")}>Cancel adding users</a></li>
-						}
 						{
-							(!this.state.isRemovingChatUser) ?
-								<li><a onClick={(e) => this.handleClick(e,"chat_remove_user")}>Remove users</a></li>
-							:
-								<li><a onClick={(e) => this.handleClick(e,"chat_remove_user_cancel")}>Stop Removing users</a></li>
+							(!this.state.isRemovingChatUser) ? 
+							(!this.state.isAddingChatUser) ? 
+						<li><a onClick={(e) => this.handleClick(e,"chat_add_user")}>{strings.add_users}</a></li>
+						: 
+						<li><a onClick={(e) => this.handleClick(e,"chat_add_user_cancel")}>{strings.cancel_adding_users}</a></li>
+						: ""
 						}
-						<li><a onClick={(e) => this.handleClick(e,"chat_change_cover")}>Change cover</a></li>
-						<li><a onClick={(e) => this.handleClick(e,"chat_change_title")}>Change title</a></li>
+						{(!this.state.isAddingChatUser) ?
+							(!this.state.isRemovingChatUser) ? 
+								<li><a onClick={(e) => this.handleClick(e,"chat_remove_user")}>{strings.remove_users}</a></li>
+							:
+								<li><a onClick={(e) => this.handleClick(e,"chat_remove_user_cancel")}>{strings.cancel_removing_users}</a></li>
+								: ""
+						}
+						{/*<li><a onClick={(e) => this.handleClick(e,"chat_change_cover")}>Change cover</a></li>*/}
+						<li><a onClick={(e) => this.handleClick(e,"chat_change_title")}>{strings.change_title}</a></li>
 						
 						</div>: ""
 				}

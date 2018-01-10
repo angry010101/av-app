@@ -15,7 +15,7 @@ class MainHeaderContent extends Component {
       });
     }
 
-    componentWillMount(){
+    componentDidMount(){
       dispatcher.register( dispatch => {
         if ( dispatch.type === 'SHOW_BACK_BTN' ) {
           this.setState({ show: true })
@@ -28,6 +28,8 @@ class MainHeaderContent extends Component {
         }
       });
     }
+	
+	
 
 
 

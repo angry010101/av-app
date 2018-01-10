@@ -25,15 +25,19 @@ class DialogAttachments extends Component {
   }
 
   select(t,c){ 
+    if (window.test_alert) {
+			 alert(this.curr);
+	}
     switch(t.type) {
         case "photo":
-		this.counter = this.counter + 1;
-          if (this.count == 1){   
+		let counter = this.curr;
+		this.curr++;
+          /*if (this.count == 1){   
             return <PhotoAttachment images={this.images} info={this.props.info[0].photo} isbig="1"/>;
           }
-          else {
-            return <PhotoAttachment images={this.images} currentImg={this.counter - 1} info={t.photo} isbig="0"/>
-          }
+          else {*/
+            return <PhotoAttachment images={this.images} currentImg={counter} info={t.photo} isbig="0"/>
+          //}
         case "wall":
           return <WallAttachment info={t.wall}/>
         case "doc":
@@ -87,32 +91,31 @@ class DialogAttachments extends Component {
 
           
     bigPic(){
-      return <PhotoAttachment images={this.images} info={this.props.info[0].photo} isbig="1"/>
+      return <div><br /><PhotoAttachment images={this.images} info={this.props.info[0].photo} isbig="1"/></div>
     }
 
 
   render() {
-    if (this.props.info[0].type == "photo") {
+    /*if (this.props.info[0].type == "photo") {
       this.curr=-1; 
     } 
     else {
       this.curr=0;
     }
-
+*/
     this.props.info.map((e) => function(e){ 
       if (e.type!="photo") this.allPhotos = false;
     }); 
+	this.curr = 0;
+	
+	
+    if (this.props.info[0].type == "photo" && this.props.info.length == 1) {
+		return 	this.bigPic()		
+	}
 
 
     return (
-      <div className="attachments_wrapper">
-		
-        {
-          (this.props.info[0].type == "photo" && this.props.info.length == 1) ?
-            this.bigPic()
-          : ""
-        }
-
+      <div className="attachments_wrapper"><br />
         {
           (this.count != 1) ? (
          (!this.allPhotos) ?

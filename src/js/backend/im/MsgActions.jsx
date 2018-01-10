@@ -1,9 +1,12 @@
 import dispatcher from "js/backend/Dispatcher.jsx"
 
+let creatingChat = false;
+
+
 export function selectDialog(id,chat_id){
 	
 	clearAttachments();
-	
+
 	dispatcher.dispatch({
 		type: "SELECT_DIALOG",
 		id,
@@ -21,8 +24,12 @@ export function selectDialogMessage(mid){
 
 export function hideBackBtn(){
 	dispatcher.dispatch({
-		type: "HIDE_BACK_BTN"
+		type: "HIDE_BACK_BTN",
+		param: creatingChat
 	});
+	if (creatingChat){//change to not creating chat
+		this.createChat(true);
+	}
 }
 
 export function showDialogAttachments(t){
@@ -33,7 +40,9 @@ export function showDialogAttachments(t){
 		type: "LOAD_DIALOG_ATTACHMENTS",
 		method: t
 	});
-	
+	dispatcher.dispatch({
+		type: "SHOW_PROGRESS"
+	});
 	
 }
 
@@ -43,12 +52,16 @@ export function clearAttachments(){
 	dispatcher.dispatch({
 		type: "CLEAR_ATTACHMENTS"
 	});
+	dispatcher.dispatch({
+		type: "HIDE_PROGRESS"
+	});	
 }
 
 
-export function showBackBtn(){
+export function showBackBtn(p){
 	dispatcher.dispatch({
-		type: "SHOW_BACK_BTN"
+		type: "SHOW_BACK_BTN",
+		param: p 
 	});
 }
 
@@ -79,6 +92,7 @@ export function addChatUser(a){
 		type: "ADDING_CHAT_USER"
 		,adding: a
 	});	
+	this.hideBackBtn();
 }
 
 export function removeChatUser(b){
@@ -86,4 +100,17 @@ export function removeChatUser(b){
 		type: "REMOVING_CHAT_USER"
 		,removing: b
 	});
+	
+	this.hideBackBtn();
 }
+export function createChat(isCreatingChat){
+		dispatcher.dispatch({
+            type: "CREATE_CHAT",
+            chatState: !isCreatingChat
+        });
+		creatingChat = !isCreatingChat;
+		if (!isCreatingChat) {
+			this.showBackBtn();			
+		}
+}
+

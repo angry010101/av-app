@@ -20,8 +20,7 @@ class MessagesStore extends EventEmitter{
 		
 		this.chatUsers =[];
 		
-		this.me = [{"uid": 156867806, "first_name": "\u0421\u0435\u043c\u0435\u043d", "last_name": "\u042f\u043a\u0438\u043c\u043e\u0432\u0438\u0447", "photo_50": "https://pp.userapi.com/c627224/v627224806/44693/zTYGXOjKFVk.jpg"}
-		],
+		this.me = [],
 		this.userstoadd = [],
 		this.selectedMessages = [],
 
@@ -387,7 +386,7 @@ class MessagesStore extends EventEmitter{
 		};
 		window.test_selectedConversation = this.selectedConversation;
 		this.emit("loadDlgFirst");
-		this.emit("addedDlgMessages");
+		//this.emit("addedDlgMessages");
 	}
 
 	startConversationSearch(text){
@@ -422,15 +421,23 @@ class MessagesStore extends EventEmitter{
                   alert("ErrorLoading response: " + res.text);
                 }
                 try{
-					
+					dispatcher.dispatch({
+							type: "HIDE_PROGRESS"
+					});	
 					let b = [];
 						let i=1;
 						while(typeof j[i] != "undefined") {
 							b.push(j[i]);
 						i++;
 					}
-		
-				  this.emit("dialogAttachmentsResponse",b);
+				
+
+
+				if (typeof b[0] == "undefined") {											
+
+						alert("There's no " + window.att_method + "s there");
+				}
+					this.emit("dialogAttachmentsResponse",b);
 				  window.att_offset = j.next_from;
 				  window.startedLoadingMoreDlgsAtt = false;
                 }
@@ -498,13 +505,25 @@ class MessagesStore extends EventEmitter{
 			switch(e[0]){
 				case 8:
 					alert(8);
+					//online
+					//c[3] = ts , c[2] = platform , c[1] = -uid
 					break;
 				case 9: 
 					alert(9);
+					//offline
+					//c[3] = ts , c[2] = platform , c[1] = -uid
 					break;
 				case 4:
-					alert("message");
+					//alert("message");c[1] = mid, c[3] = from_id , c[4] = time, c[5] = trxt
+					let m = { 
+						
+					}
+					this.addDlgMessage(m);
 					break;
+				case 80:
+					//messages count 
+					//e[1] == count
+					
 				default:
 					return;
 		}

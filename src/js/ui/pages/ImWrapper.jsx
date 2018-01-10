@@ -3,11 +3,14 @@ import Im from 'js/ui/pages/Im.jsx'
 import Header from 'js/ui/components/Header.jsx'
 
 
+//import * as photoErrorDetectStart from 'js/backend/PhotoErrorHandling.jsx';
+
+
 import { browserHistory } from 'react-router';
 import Login from 'js/ui/pages/Login.jsx'
 import Logout from 'js/ui/pages/Logout.jsx'
 import { startLoadingPreviewMessages } from 'js/backend/im/LoadPreviewMessages.jsx'
-//import * as LPHClient from 'js/backend/im/LongPollHistoryClient.jsx'
+import * as LPHClient from 'js/backend/im/LongPollHistoryClient.jsx'
 import * as LPClient from 'js/backend/im/LongPollClient.jsx'
 
 import LightboxPictures from 'js/ui/components/LightBoxPictures.jsx'
@@ -29,6 +32,7 @@ class ImWrapper extends Component {
 
 		fwdMsg: []
   	});
+	
   }
 
   componentDidMount() {
@@ -49,12 +53,19 @@ class ImWrapper extends Component {
   }  
  
 
+	chImg(c){
+		let cimg = c;
+			this.setState({
+				SVcurrentImg: cimg
+			})
+	}
+	
   render() {
     return (
       <div>
 		<Header />
         <LightboxFwdMsgs i={this.state.fwdMsg }/>     
-        <LightboxPictures images={this.state.SVimages} currentImg={this.state.SVcurrentImg} show={this.state.SVshow} />
+        <LightboxPictures images={this.state.SVimages} currentImg={this.state.SVcurrentImg} show={this.state.SVshow} changeImage={(e) => this.chImg(e)}/>
         <Im />
       </div>
     );

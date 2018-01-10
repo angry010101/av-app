@@ -3,6 +3,9 @@ import SearchInput from 'js/ui/components/SearchInput.jsx'
 
 import 'css/components/header.css';
 
+import MainHeaderContentNoAuth from 'js/ui/components/MainHeaderContentNoAuth.jsx'
+
+
 class HeaderLogin extends Component {
     constructor(){
         super();
@@ -82,6 +85,11 @@ class HeaderLogin extends Component {
                         <a onClick={this.showSearch.bind(this)} className="click_search_icon"></a>
                         </div>
                 }
+				
+                <div className="main_header_content_wrapper">
+                    <MainHeaderContentNoAuth />
+                </div>
+				
             </div>
     );
   }

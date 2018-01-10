@@ -13,11 +13,43 @@ window.photo_id = "";
 var DataTransfer = require('fbjs/lib/DataTransfer');
 
 
+const progressLink = "http://qwertyangry.pythonanywhere.com/static/images/circle-loading.gif";
+
+
+import LocalizedStrings from 'react-localization';
+ 
+let strings = new LocalizedStrings({
+ en:{
+   your_message:"Your message...",
+   chat_title: "Enter chat title here...",
+   error: "Oh no! An error happened.",
+   uploaded: "File is successfully uploaded"
+ },
+ ua: {
+   your_message:"Ваше повідомлення...",
+   chat_title: "Будь ласка, введіть назву бесіди...",
+   error: "О ні! Трапилася помилка",
+   uploaded: "Файл завантажений"
+ },
+ ru: {
+   your_message:"Ваше сообщение...",
+   chat_title: "Введите название чата...",
+   error: "О нет! Случилась ошибка",
+   uploaded: "Файл успешно загружен"
+ }
+});
+
 const divSpace = {
   width: '32px',
   height: '32px',
   display: 'inline-block'
 };
+
+const progressStyle = {
+	"width": "32px",
+	"height": "32px",
+	"margin-left": "8px"
+}
 
 class SendMessagePanel extends Component {
 	constructor(props){
@@ -25,7 +57,9 @@ class SendMessagePanel extends Component {
 		this.state = {
 			height: 96,
 			messageText: "",
-			message: {}
+			message: {},
+			
+			isUploading: false
 		};
 	}
 
@@ -86,7 +120,7 @@ class SendMessagePanel extends Component {
    	if (parseInt(e.style.maxHeight) > parseInt(e.style.height)){
    		d.style.height = "calc(100% - " + (parseInt(e.style.height)+h+h1) + "px)"; 
    	}*/
-}
+	}
 
 	keyDown(e){
 		if (e.keyCode === 13 && e.ctrlKey) {
@@ -104,21 +138,23 @@ class SendMessagePanel extends Component {
 			window.test_a = a;
 			files = e.target.files;
 		}
+		this.setState({
+			isUploading: true
+			},() => {
 		for (var i=0;i<files.length;i++ )
 		request.post('/file_upload')
 		  	.attach('upload_file', 	files[i])
 		  	.field('caption', 'My cats')	
             .end((err, res)=>{
               if (err || !res.ok) {
-                 alert('Oh no! error img');
-                 window.err = err;
+                 alert(strings.error);
               } else {
                  var j;
                  try{
                     j = JSON.parse(res.text);
                  }
                  catch(e){
-                 	alert("err");
+                 	alert(strings.error);
                  	return;
                  }
                 /* if (window.photo_id != "" && typeof window.photo_id != "undefined" && window.photo_id) 
@@ -130,9 +166,15 @@ class SendMessagePanel extends Component {
                  else {
                 	 window.photo_id += j[0].id ;
                  }
-                 alert("Uploaded");
+                 alert(strings.uploaded);
               }
-            });
+			  
+				this.setState({
+					isUploading: false
+				});
+            }); 
+			
+			} );
 	}
 
 
@@ -159,6 +201,9 @@ class SendMessagePanel extends Component {
 		}
 	}
 	
+	showProgress(){
+		return  <img src={progressLink} style={progressStyle} />	 
+	}
 	
   render() {
     return (
@@ -179,8 +224,9 @@ class SendMessagePanel extends Component {
 						 id="message_textarea" 
 						 name="msg" 
 						 onPaste={(e) => this.paste(e)}
-						 placeholder={(!this.props.isCreatingChat) ? "Your message..." : "Type chat title"}>
+						 placeholder={(!this.props.isCreatingChat) ? strings.your_message : strings.chat_title}>
 					</textarea>
+					{ (!this.state.isUploading) ?
 						<div className="send_btn">
 							<input onClick={(e) => this.clickSendBtn(e)} 
 								type="submit" 
@@ -189,7 +235,8 @@ class SendMessagePanel extends Component {
 								className="send_btn_input" />
 							{//<img src="https://cdn4.iconfinder.com/data/icons/devine_icons/Black/PNG/Appliaction%20and%20Programs/iPhoto.png" className="img_photo_attachment"/>
 							}
-						</div>
+						</div> : this.showProgress()
+					}
 				</div>
 				{
 				(this.props.selectedMessages || this.props.attachments.length > 0) ?	

@@ -17,6 +17,28 @@ import * as SD from 'js/backend/im/SearchDialog.jsx'
 
 import dispatcher from "js/backend/Dispatcher.jsx"
 
+
+const styleNothingFound={
+	"margin-top": "16px"
+}
+
+
+import LocalizedStrings from 'react-localization';
+ 
+let strings = new LocalizedStrings({
+ en:{
+	search: "Search"
+ },
+ ua: {
+	 search: "Пошук"
+ },
+ ru: {
+	 search: "Поиск" 
+ }
+});
+
+
+
 class ConversationSearchList extends Component {
   constructor(props){
     super(props);
@@ -25,6 +47,7 @@ class ConversationSearchList extends Component {
       ,s: 0,
       isChatContainer: 0
       ,res: []
+	  ,responseParsed: false
     });
     this.first = false;
   }
@@ -41,13 +64,17 @@ class ConversationSearchList extends Component {
       this.setState({
           q: e,
           isChatContainer: iscc,
-          res: r
+          res: r ,
+		  responseParsed: true
+
       });
     });
     SearchDialogStore.on("SEARCH_DIALOG_STARTED",(e) =>{
       this.setState({
           q: e,
-          res: []
+          res: [],
+		  responseParsed: false
+
       });
     });
 
@@ -102,12 +129,18 @@ class ConversationSearchList extends Component {
     );
   }
 
+  emptyList(){
+	  return <div className="empty_messages_div" style={styleNothingFound}>Nothing found</div>
+  }
+  
   getListRes(res){
     if (this.props.q == "" && this.props.isChatContainer==1) {
       return ;
     }
 
-
+	if (res.length == 0 && this.state.responseParsed){
+		return this.emptyList();
+	}
     //fix if only chatt
     var listItems;
     if (this.props.isCreatingChat){
@@ -145,7 +178,7 @@ class ConversationSearchList extends Component {
        { (this.props.q != "") ?
           <div className="cs_header">
           <span className="cs_query">
-          Search: { this.state.q }
+          {strings.search}: { this.state.q }
           </span>  
         </div> : ""
       }

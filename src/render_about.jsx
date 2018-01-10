@@ -2,9 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-import ImWrapper from 'js/ui/pages/ImWrapper.jsx'
+import About from 'js/ui/pages/About.jsx'
 
 ReactDOM.render(
-  <ImWrapper />,
+  <About />,
   document.querySelector('#app')
 );

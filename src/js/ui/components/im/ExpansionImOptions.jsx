@@ -1,10 +1,33 @@
 import React, { Component } from 'react';
-import dispatcher from "js/backend/Dispatcher.jsx"
 import 'css/components/im/im_expansion_dlg.css';
 
 
+import * as MsgActions from 'js/backend/im/MsgActions.jsx'
 import * as SD from 'js/backend/im/SearchDialog.jsx'
 
+
+	  
+import dispatcher from "js/backend/Dispatcher.jsx"
+
+
+
+
+import LocalizedStrings from 'react-localization';
+ 
+let strings = new LocalizedStrings({
+ en:{
+   create_chat: "Create chat",
+   cancel_chat: "Cancel creating chat"
+ },
+ ua: {
+   create_chat: "Створити бесіду",
+   cancel_chat: "Припинити створювання бесіди"
+ },
+ ru: {
+   create_chat: "Создать беседу",
+   cancel_chat: "Отменить создание беседы"
+ }
+});
 
 class ExpansionImOptions extends Component {
      constructor(props){
@@ -13,7 +36,6 @@ class ExpansionImOptions extends Component {
         this.state={
             isCreatingChat: false
         };
-        this.handleCreateChat  = this.handleCreateChat.bind(this);
     }
 
     handleClick(e,l){
@@ -23,18 +45,27 @@ class ExpansionImOptions extends Component {
     handleCreateChat(e){
         e.preventDefault();
         var x = this.state.isCreatingChat;
-        dispatcher.dispatch({
-            type: "CREATE_CHAT",
-            chatState: !x
-        });
+		MsgActions.createChat(x);
+        
         this.setState({
             isCreatingChat: !x
         });
         SD.searchDialog("");
     }
+	
+	componentDidMount(){
+		
+		dispatcher.register( dispatch => {
+        if ( dispatch.type === 'HIDE_BACK_BTN' ) {
+			if (this.state.isCreatingChat)
+          this.setState({ isCreatingChat: !this.state.isCreatingChat})
+        }
+      });
+	  
+	}
 
     render() {
-        var text_chat = (this.state.isCreatingChat) ?  "Cancel creating chat" : "New convrsation"
+        var text_chat = (this.state.isCreatingChat) ?  strings.cancel_chat : strings.create_chat
         return (
             <div>
               <ul>

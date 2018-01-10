@@ -15,6 +15,29 @@ const emptyMessagesDiv = (<div className="empty_messages_div"><a>it is empty and
 window.dlgsOffset = 0;
 
 
+const style_load_documents_link = {
+	"margin-left": "8px",
+	"font-family": "Arial"
+}
+
+import LocalizedStrings from 'react-localization';
+ 
+let strings = new LocalizedStrings({
+ en:{
+   load_more: "Load more...",
+   empty_container: "it is empty and cold"
+ },
+ ua: {
+   load_more: "Завантажити ще...",
+   empty_container: "тут порожньо та холодно"
+ },
+ ru: {
+   load_more: "Загрущить ещё...",
+   empty_container: "тут пусто и холодно"
+ }
+});
+
+
 function ListItem(props) {
   
   return (<div>
@@ -73,11 +96,10 @@ class DialogContainer extends Component {
 
 	 
 		MessagesStore.on("dialogAttachmentsResponse",(data) =>{
-			
+			window.test_dialogAttachments = data;
 			this.setState({
 				dialogAttachments: this.state.dialogAttachments.concat(data)
 			});
-			if (typeof data[1] == "undefined") alert("There's no " + window.att_method + "s there");
 		});
 
       dispatcher.register( dispatch => {
@@ -123,18 +145,19 @@ class DialogContainer extends Component {
 		var data =  this.state.dialogAttachments;
       const a = data;
 	  
-	  if (typeof a[1] == "undefined") return this.emptyDiv(window.att_method);
+	  if (typeof a[0] == "undefined") return this.emptyDiv(window.att_method);
 		  
 	  return <div><DialogAttachments info={a}/>
-		  <a onClick={(e) => startLoadingDialogMessages()}>Load more</a></div>
+		  <a onClick={(e) => startLoadingDialogMessages()} style={ style_load_documents_link} >{strings.load_more}</a></div>
 	}
 	
 	getRender(){
-	if (typeof this.state.dialogAttachments[1] != "undefined" )
-		{ return this.dialogAttachmentsFun(); }
-	else {
-      return this.MessagesContainerFun(); 
-	}
+	
+		if (typeof this.state.dialogAttachments[0] != "undefined" )
+			{ return this.dialogAttachmentsFun(); }
+		else {
+			return this.MessagesContainerFun(); 
+		}
 	}
 	
  

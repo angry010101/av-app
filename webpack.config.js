@@ -8,7 +8,8 @@ const PAGES_DIR = path.resolve(__dirname, 'src/js/ui/pages/');
 const config = {
   entry: {
     main:  APP_DIR + '/render_main.jsx',
-    login: APP_DIR + '/render_login.jsx'
+    login: APP_DIR + '/render_login.jsx',
+    about: APP_DIR + '/render_about.jsx'
   },
   output: {
     path: BUILD_DIR,

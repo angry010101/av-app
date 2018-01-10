@@ -3,8 +3,24 @@ import MessagesStore from 'js/backend/im/MessagesStore.jsx'
 const request = require('superagent');
 
 
+
+import LocalizedStrings from 'react-localization';
+ 
+let strings = new LocalizedStrings({
+ en:{
+   error: "Oh no! An error happened."
+ },
+ ua: {
+   error: "О ні. Трапилася помилка"
+ },
+ ru: {
+   error: "О нет. Случилась ошибка"
+ }
+});
+
 export function startLongPollHistory(){
-     if (typeof window.lastMsgId == "undefined" ){            
+     if (typeof window.lastMsgId == "undefined" ){          
+		setTimeout(() => { startLongPollHistory(); },window.timeLPH);	 
       return ;
      }
      
@@ -21,14 +37,16 @@ export function startLongPollHistory(){
                 }
                 catch(ec){
 
-                  alert("ErrorLPH: " + res.text);
+                  alert(strings.error);
                 }
-                try{
-                 MessagesStore.parseLPH(j);
-                }
-                catch (ec){
-                  
-                }
+				if (window.prevOffset != 0){
+					try{
+					 MessagesStore.parseLPH(j);
+					}
+					catch (ec){
+					  alert(strings.error)
+					}
+				}
               }
               setTimeout(() => { startLongPollHistory(); },window.timeLPH);
             });       

@@ -9,6 +9,23 @@ const request = require('superagent');
 
 var startedLoadingMoreDlgs = false;
 
+
+
+import LocalizedStrings from 'react-localization';
+ 
+let strings = new LocalizedStrings({
+ en:{
+   error: "Oh no! An error happened."
+ },
+ ua: {
+   error: "О ні! Трапилася помилка"
+ },
+ ru: {
+   error: "О нет! Случилась ошибка"
+ }
+});
+
+
 export function startLoadingDialogMessages(){
     
 	
@@ -35,11 +52,12 @@ export function startLoadingDialogMessages(){
             .send({ offset: window.dlgsOffset, isChat: sc.chat_id, uid: uidr})
             .end((err, res) => {
              if (err || !res.ok) {
-                 alert('Oh no! error');
+                 alert(strings.error);
 
               } else {
                  var j = JSON.parse(res.text);
                  let c = j.splice(0,1);
+				//???
                  UsersStore.parseCheckLoad(j);//TODO :fwd messages users parsing
 
                  MessagesStore.addDlgMessages(j,c);

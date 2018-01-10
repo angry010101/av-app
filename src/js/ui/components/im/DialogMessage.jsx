@@ -13,6 +13,23 @@ import UsersStore from 'js/backend/im/UsersStore.jsx'
 import dispatcher from "js/backend/Dispatcher.jsx"
 
 
+
+
+import LocalizedStrings from 'react-localization';
+ 
+let strings = new LocalizedStrings({
+ en:{
+   message_deleted: "Deleted"
+ },
+ ua: {
+   message_deleted: "Видалено"
+ },
+ ru: {
+   message_deleted: "Удалено"
+ }
+});
+
+
 class DialogMessage extends Component {
   constructor(props) {
     super(props);
@@ -113,22 +130,14 @@ class DialogMessage extends Component {
               
               <div className="msg_content">
                 <div className="msg_text">
-
                   { 
                     (typeof this.state.body != "undefined" && this.state.body != "" ) ?
                     this.state.body.split("<br>").map(function(item) {
                      return (
-                      <div>
-                        {item}
-                        <br/>
-                      </div> 
+                      <div>{item}<br/></div> 
                       )
                     }) : ""
-                  
-                  }
-
-
-                </div>
+                  }</div>
 
                   {
                     (typeof this.msg.attachments != "undefined") ?
@@ -144,8 +153,8 @@ class DialogMessage extends Component {
                   }
 
                   {
-                    (typeof this.msg.deleted != "undefined" && this.msg.deleted == true) ? 
-                      <a>DELETED</a> : ''
+                    (this.msg.deleted == true) ? 
+                      <a>{strings.message_deleted}</a> : ''
                     
                   }
 

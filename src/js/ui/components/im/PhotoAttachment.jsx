@@ -23,7 +23,7 @@ class PhotoAttachment extends Component {
     dispatcher.dispatch({
       type: 'showShadowView',
       images: this.props.images,
-      currentImg: 0//this.props.currentImg
+      currentImg: this.props.currentImg
     })
 
   }
@@ -32,8 +32,8 @@ class PhotoAttachment extends Component {
     return (
       <div className="attachment_img_wrapper" onClick={(e) => this.handleClick(e)}>
       {
-        /*(this.props.isbig == 1) ? 
-        <img className="photo_attachment_img_big" src={this.props.info.src_big} /> :*/
+        (this.props.isbig == 1) ? 
+        <img className="photo_attachment_img_big" src={this.props.info.src_big} /> :
         <img className="photo_attachment_img" src={this.props.info.src} /> 
       }
       </div>

@@ -25,6 +25,7 @@ export function startLoadingPreviewMessages(){
                  UsersStore.add(j.users);
                  startedLoadingMorePrev = false;
                  if (window.prevOffset == 0 ){
+					 window.lastMsgId = j.msgs[0].mid;
                     UsersStore.setMe(j.me);
                  }
                  window.prevOffset += 20;
