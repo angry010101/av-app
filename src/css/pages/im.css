@@ -40,7 +40,7 @@
 	background-color: #fcfcfc; /*#fcfcfc;*/
 	height: 100%;
 	overflow-y: hidden;
-	width: inherit;
+	width: calc(100% - 348px);
 	position: relative;
 }
 

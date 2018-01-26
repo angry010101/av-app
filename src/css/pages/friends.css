@@ -1,0 +1,19 @@
+.friends_main_wrapper{
+	
+}
+
+.friends_main_content{
+	max-width: 1000px;
+	width: 100%;
+	margin: 0 auto;
+}
+
+.friends_count_label_wrapper{
+	background-color: #f8f8f8;
+	padding: 8px;
+}
+
+
+.friends_count_label{
+	font-size: 13pt;
+}

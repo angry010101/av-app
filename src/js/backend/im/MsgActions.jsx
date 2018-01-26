@@ -3,14 +3,15 @@ import dispatcher from "js/backend/Dispatcher.jsx"
 let creatingChat = false;
 
 
-export function selectDialog(id,chat_id){
+export function selectDialog(id,chat_id,mid){
 	
 	clearAttachments();
 
 	dispatcher.dispatch({
 		type: "SELECT_DIALOG",
 		id,
-		chat_id
+		chat_id,
+		mid
 	});
 }
 
@@ -19,6 +20,16 @@ export function selectDialogMessage(mid){
 		type: "SELECT_DIALOG_MESSAGE",
 		mid
 	});
+}
+
+
+export function searchMessages(startedSearching){
+	dispatcher.dispatch({
+		type: "SHOW_SEARCH_DIALOG_MESSAGES",
+		startedSearching
+	});
+	
+	if (startedSearching) this.showBackBtn();
 }
 
 

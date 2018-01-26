@@ -26,7 +26,7 @@ let strings = new LocalizedStrings({
 });
 
 
-export function startLoadingDialogMessages(){
+export function startLoadingDialogMessages(last_mid){
     
 	
 	
@@ -46,10 +46,11 @@ export function startLoadingDialogMessages(){
     if (sc.chat_id > 0){
       uidr = parseInt(sc.chat_id) + 2000000000;
     }
+	var last_msg_id = last_mid;
 
     request.post('/getmsg')
             .set('Content-Type', 'application/x-www-form-urlencoded')
-            .send({ offset: window.dlgsOffset, isChat: sc.chat_id, uid: uidr})
+            .send({ offset: window.dlgsOffset, isChat: sc.chat_id, uid: uidr, mid: last_msg_id})
             .end((err, res) => {
              if (err || !res.ok) {
                  alert(strings.error);

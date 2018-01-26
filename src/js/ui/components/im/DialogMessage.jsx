@@ -37,6 +37,7 @@ class DialogMessage extends Component {
     var msg = props.contents;
     this.msg = msg;
     var u = props.user;
+	let tu = UsersStore.getById(msg.uid)
     this.state = {date: msg.date,
                   mid: msg.mid,
                   body: msg.body,
@@ -49,7 +50,8 @@ class DialogMessage extends Component {
                   out: msg.out,
                   selected: false,
                   user: (typeof u !== 'undefined') ? u : [],
-                  attachments: msg.attachments
+                  attachments: msg.attachments,
+				  interlocutor: (tu)? tu : []
                 };
     if (window.constructorDialogMessageCalled){
       window.constructorDialogMessageCalled += 1;
@@ -69,10 +71,18 @@ class DialogMessage extends Component {
 
     componentWillMount(){
       UsersStore.on("ADDED_USER",(u) =>{
-      if (u.uid == this.msg.uid)
-      this.setState({
-          user: u
-      });
+      if (u.uid == this.msg.uid){
+		  this.setState({
+			  interlocutor: u
+		  })
+		  
+		 if (this.state.out != 1){
+				  
+			  this.setState({
+				  user: u,
+			  });
+		}
+	  }
     });
       
       MessagesStore.on("selectedMessagesReset",() => {
@@ -106,19 +116,23 @@ class DialogMessage extends Component {
     }
 
   render() {
+	 
     var a1 = 1;
     return (
-      <div onMouseOver={this.selection.bind(this)} className={ (this.state.selected === false) ? 'msg_wrapper' : 'msg_wrapper  selected' } style="" ref="myInput" key="{this.state.mid}" style={this.state.style} onClick={this.changeSt.bind(this)} >
+      <div onMouseOver={this.selection.bind(this)} className={ (this.state.selected === false) ? 'msg_wrapper' : 'msg_wrapper  selected' } style="" ref="myInput" key={this.state.mid} style={this.state.style} onClick={this.changeSt.bind(this)} >
         <div className="msg_container">
           <div className="msg_img_div">
             <img className="photo_img" src={
-              /*("https://vkuk.000webhostapp.com/getcontent.php?url=") + */this.state.user.photo_50} />
+              /*("https://vkuk.000webhostapp.com/getcontent.php?url=") + */( this.state.user.photo_50) ? this.state.user.photo_50 : this.state.user.photo } />
           </div>
           <div className="msg_content_div">
               
               <div className="msg_headers">
                 <div className="msg_name_text">
-                  {this.state.user.first_name + " " + this.state.user.last_name}
+                  {(this.state.user.first_name) ? this.state.user.first_name + " " + this.state.user.last_name : ""}
+				  {(this.state.user.gid) ? this.state.user.name : ""}
+				  
+				 { (this.props.isSearch && this.state.out == 1) ? "with uid:" + ((this.state.interlocutor.first_name) ? this.state.interlocutor.first_name : this.state.interlocutor.chat_title) : ""}
                 </div>
                 <div className="msg_delete">
                   <a onClick={(e) => this.deleteMsg(e)}>X</a>

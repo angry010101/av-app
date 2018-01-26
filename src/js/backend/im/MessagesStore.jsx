@@ -1,6 +1,7 @@
 import { EventEmitter } from "events"
 import dispatcher from "js/backend/Dispatcher.jsx"
 
+import UsersStore from 'js/backend/im/UsersStore.jsx'
 
 const request = require('superagent');
 
@@ -41,7 +42,23 @@ class MessagesStore extends EventEmitter{
      		 this.startLongPollHistory();
     		});*/
 
-
+	}
+	
+	markAsRead(pid,mid){
+		var msgprev = this.prevMsgs.find(m => m.mid === mid);
+		msgprev.read_state = 1;
+		
+		this.emit("addedPrevMessages");
+		var msg = this.dlgMsgs.find(m => m.mid === mid);		
+		
+		if (msg){
+			while (msg.read_state == 0){
+				msg = this.dlgMsgs.find(m => m.mid === mid);
+				msg.read_state = 1;
+				mid--;
+			}
+			this.emit("addedDlgMessages");
+		}		
 	}
 
 	isAddingUserToChat(){
@@ -71,7 +88,7 @@ class MessagesStore extends EventEmitter{
 
 	addOrUpdPrevMessages(msgs,profiles,c,toend){
 		for (var i=0;i<c;i++){
-			var cm = this.prevMsgs.find((e) => e.uid === msgs[i].chat_id);
+			var cm = this.prevMsgs.find((e) => { return e.chat_id === msgs[i].chat_id && e.chat_id} );
 				if (typeof cm != "undefined"){
 					var ind = this.prevMsgs.indexOf(cm);
 					this.prevMsgs.splice(ind,1);
@@ -208,7 +225,7 @@ class MessagesStore extends EventEmitter{
          } 
 
 	}
-
+	
 	containsUser(id){
 		var uf = this.users.find(u => u.uid === id); 
 		var r = (typeof uf != "undefined") ? true : false; 
@@ -276,7 +293,7 @@ class MessagesStore extends EventEmitter{
 		this.emit("addedPrevMessage");
 	}
 
-	addPrevMessages(m,u,c,tobegin){
+	addPrevMessages(m,u,groups,c,tobegin){
 		//no update due to offset loading
 		
 
@@ -285,7 +302,8 @@ class MessagesStore extends EventEmitter{
 				m[i].user = u.find((u) => u.uid === m[i].uid); 
 			} 
 			else {
-				this.loadGroup(m[i].uid)
+				m[i].user = groups.find((g) => g.gid === (parseInt(m[i].uid)/-1));
+				//this.loadGroup(m[i].uid)
 			}
 		}
 		if (tobegin == 0){
@@ -376,7 +394,7 @@ class MessagesStore extends EventEmitter{
 		this.emit("selectedMessagesReset");
 	}
 
-	selectDialog(id,cid){
+	selectDialog(id,cid,mid){
 		this.dlgMsgs = [];
 		window.dlgsOffset=0;
 
@@ -385,7 +403,7 @@ class MessagesStore extends EventEmitter{
 			chat_id: cid
 		};
 		window.test_selectedConversation = this.selectedConversation;
-		this.emit("loadDlgFirst");
+		this.emit("loadDlgFirst",mid);
 		//this.emit("addedDlgMessages");
 	}
 
@@ -503,27 +521,47 @@ class MessagesStore extends EventEmitter{
 		let updates = t.updates;
 		updates.map((e) => {
 			switch(e[0]){
+				case 6: 
+					//read income
+					this.markAsRead(e[1],e[2]);
+				case 7: 
+					//read outcome
+					this.markAsRead(e[1],e[2]);
 				case 8:
-					alert(8);
 					//online
-					//c[3] = ts , c[2] = platform , c[1] = -uid
+					UsersStore.setOnline(Math.abs(e[1]),1)
 					break;
 				case 9: 
-					alert(9);
 					//offline
-					//c[3] = ts , c[2] = platform , c[1] = -uid
+					UsersStore.setOnline(Math.abs(e[1]),0)
 					break;
 				case 4:
-					//alert("message");c[1] = mid, c[3] = from_id , c[4] = time, c[5] = trxt
+					//uid from id bug !!!!!!
 					let m = { 
-						
+						mid: e[1],
+						from_id: e[3],
+						uid: e[3],
+						date: e[4],
+						body: c[5],
+						read_state:	0
 					}
-					this.addDlgMessage(m);
+					let arr = [];
+					arr.push(m);
+					this.addOrUpdPrevMessages(arr,UsersStore.get(),1,1);
+					break;
+				case 61:
+					//typing dialog
+					this.emit("user_typing",e[1]);
+					break;
+				case 62:
+					//typing conversation
+					this.emit("user_typing",e[1],e[2]);
 					break;
 				case 80:
 					//messages count 
 					//e[1] == count
-					
+					break;
+				
 				default:
 					return;
 		}
@@ -534,7 +572,7 @@ class MessagesStore extends EventEmitter{
 	handleActions(a){
 		switch(a.type){
 			case "SELECT_DIALOG":
-				this.selectDialog(a.id,a.chat_id);
+				this.selectDialog(a.id,a.chat_id,a.mid);
 				this.hideMenuChange();
 				break;
 			case "BACK_BUTTON":

@@ -29,7 +29,6 @@ class ImWrapper extends Component {
 		SVshow: false,
 		SVimages: [],
 		SVcurrentImg: 0,
-
 		fwdMsg: []
   	});
 	
@@ -44,9 +43,7 @@ class ImWrapper extends Component {
          	SVcurrentImg: dispatch.currentImg
          })
       }
-    });
-    dispatcher.register( dispatch => {
-      if ( dispatch.type === 'hideShadowView' ) {
+	  if ( dispatch.type === 'hideShadowView' ) {
         this.setState({ SVshow: false, SVimages: [], SVcurrentImg: 0 })
       }
     });

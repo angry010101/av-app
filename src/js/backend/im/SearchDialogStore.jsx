@@ -15,7 +15,6 @@ class SearchDialogStore extends EventEmitter{
 	}
 
 	getResponse(){
-		window.sres = this.res;
 		return this.res;
 	}
 
@@ -27,6 +26,7 @@ class SearchDialogStore extends EventEmitter{
 		this.q = q;
 		this.emit("SEARCH_DIALOG_STARTED",q);
 	}
+	
 
 	handleActions(a){
 		switch(a.type){

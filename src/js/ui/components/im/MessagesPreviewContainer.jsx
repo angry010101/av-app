@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import Message from 'js/ui/components/im/Message.jsx' ;
 import 'css/components/im/messages_preview_container.css'
 import MessagesContainer from 'js/ui/components/im/MessagesContainer.jsx'
-import request from "superagent";
 import * as MsgActions from 'js/backend/im/MsgActions.jsx'
-
 import MessagesStore from 'js/backend/im/MessagesStore.jsx'
-import UsersStore from 'js/backend/im/UsersStore.jsx'
-
 import { startLoadingPreviewMessages } from 'js/backend/im/LoadPreviewMessages.jsx'
 
+import UsersStore from 'js/backend/im/UsersStore.jsx'
 
 
 window.prevOffset = 0;
@@ -28,43 +25,64 @@ class MessagesPreviewContainer extends MessagesContainer {
   componentWillMount(){
     
   }
-
-  componentDidMount() {
-    const self = this;
-	MessagesStore.on("addedPrevMessage",() =>{
-      this.setState({
+  
+  updateMessages(){
+	  this.setState({
           msgs: MessagesStore.getPrevMessages(),
           msgscount: MessagesStore.getPrevMessagesCount()
       });
-    });
-    MessagesStore.on("addedPrevMessages",() =>{
-      this.setState({
-          msgs: MessagesStore.getPrevMessages(),
-          msgscount: MessagesStore.getPrevMessagesCount()
-      });
-    });
-   /* alert("one");
-   
-    $.getJSON("..jsxon/user.jsxon", .jsxon) => {
-      this.setState({user:.jsxon});
-    });
-    alert("two");*/
-    
   }
+
+  updateMessage(){
+	  this.setState({
+          msgs: MessagesStore.getPrevMessages(),
+          msgscount: MessagesStore.getPrevMessagesCount()
+      });
+  }
+  
+  componentDidMount(){
+	MessagesStore.on("addedPrevMessage", ()=>{
+		this.setState({
+          msgs: MessagesStore.getPrevMessages(),
+          msgscount: MessagesStore.getPrevMessagesCount()
+      });
+	});
+    MessagesStore.on("addedPrevMessages",() => {
+		this.setState({
+          msgs: MessagesStore.getPrevMessages(),
+          msgscount: MessagesStore.getPrevMessagesCount()
+      });
+	  window.test_msgs =this.state.msgs;
+	});
+	
+    UsersStore.on("USERS_CHANGED",(type,p1,p2,p3) => {
+		this.setState({
+          msgs: MessagesStore.getPrevMessages(),
+          msgscount: MessagesStore.getPrevMessagesCount()
+      });
+	});
+  }
+  
+  componentWillUnmount(){ 
+	/*MessagesStore.removeListener("addedPrevMessage", this.updateMessage);
+    MessagesStore.removeListener("addedPrevMessages",this.updateMessages);*/
+  }
+
 
   selectDialog(e,m){
       e.preventDefault();
       var c=-1;
+	  
+	
       if (typeof m.chat_id != 'undefined'){
         c = m.chat_id;
       }
-      MsgActions.selectDialog(m.uid,c);//id, ischat
+      MsgActions.selectDialog(m.uid,c,m.mid);
       MsgActions.showBackBtn();
   }
 
  ListItem(m,k1) {
-  // Correct! There is no need to specify the key here:
-  if (parseInt(m.uid)<0) return "";
+  //if (parseInt(m.uid)<0) return "";
   
   return <div>
         <li onClick={(e) => this.selectDialog(e,m)} key={k1}>
@@ -74,10 +92,9 @@ class MessagesPreviewContainer extends MessagesContainer {
   }
 
 
-  MessagesContainerFun() { 
+  MessagesContainerFun() {
     const msgs = this.state.msgs;
-    const count = this.state.msgscount;
-    //var users = props.users;
+	const count = this.state.msgscount;
     const listItems = msgs.map((message) => 
       this.ListItem(message,message.mid) 
     );

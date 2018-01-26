@@ -66,9 +66,9 @@ class DialogContainer extends Component {
 
 */
 
-      MessagesStore.on("loadDlgFirst",() =>{
+      MessagesStore.on("loadDlgFirst",(mid) =>{
         window.dlgsOffset = 0;
-        startLoadingDialogMessages();
+        startLoadingDialogMessages(mid);
       });
     
       MessagesStore.on("addedDlgMessage",() =>{
@@ -120,9 +120,10 @@ class DialogContainer extends Component {
       const msgs = this.state.dialogmsgs;
       var users =  UsersStore.get();
       const me = UsersStore.getMe();
+	  const groups = UsersStore.getGroups();
       if (msgs.length === 0) return emptyMessagesDiv;
       const listItems = msgs.map((message) =>
-         <ListItem value={message} user={(message.out === 1) ? me[0] : users.find(u => u.uid === message.uid)} users={users}/>
+         <ListItem value={message} user={(message.out === 1) ? me[0] : ((users.find(u => u.uid === message.uid)) ?  users.find(u => u.uid === message.uid) : groups.find(g => g.gid === (message.uid)/-1) )} users={users}/>
       );
 	  
 

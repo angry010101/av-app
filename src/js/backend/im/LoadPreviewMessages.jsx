@@ -21,13 +21,14 @@ export function startLoadingPreviewMessages(){
                  var j = JSON.parse(res.text);
 
                  let c = j.msgs.splice(0,1);
-                 MessagesStore.addPrevMessages(j.msgs,j.users,c,0);
                  UsersStore.add(j.users);
-                 startedLoadingMorePrev = false;
+				 UsersStore.addGroups(j.groups);
                  if (window.prevOffset == 0 ){
 					 window.lastMsgId = j.msgs[0].mid;
                     UsersStore.setMe(j.me);
                  }
+                 MessagesStore.addPrevMessages(j.msgs,j.users,j.groups,c,0);
+                 startedLoadingMorePrev = false;
                  window.prevOffset += 20;
               }
             });

@@ -1,0 +1,12 @@
+.friend_item_wrapper{
+	
+}
+
+.friend_item_content{
+	height: 102px;
+}
+
+.friend_item_profile_photo{
+	border-radius: 64px;
+	margin: auto 4px;
+}

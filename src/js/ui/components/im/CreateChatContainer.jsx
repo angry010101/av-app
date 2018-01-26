@@ -4,6 +4,8 @@ import dispatcher from "js/backend/Dispatcher.jsx"
 
 import CreateChatStore from 'js/backend/im/CreateChatStore.jsx'
 
+import 'css/components/im/conversation_search.css'
+
 
 import 'css/components/im/create_chat_container.css'
 

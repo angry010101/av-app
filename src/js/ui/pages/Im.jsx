@@ -11,8 +11,8 @@ import * as MsgActions from 'js/backend/im/MsgActions.jsx'
 
 import RemoveChatUsersList from 'js/ui/components/im/RemoveChatUsersList.jsx'
 
+import SearchDialogMessages from 'js/ui/components/im/SearchDialogMessages.jsx'
 
-import ConversationTools from 'js/ui/components/im/ConversationTools.jsx'
 import SearchDialogStore from 'js/backend/im/SearchDialogStore.jsx'
 import { startLoadingDialogMessages } from 'js/backend/im/LoadDialogMessages.jsx'
 import { startLoadingPreviewMessages } from 'js/backend/im/LoadPreviewMessages.jsx'
@@ -50,7 +50,8 @@ class Im extends Component {
 		currentChatUsers: [],
 		showSendMessagePanel: false,
 		showProgress: false,
-		selected_first_dialog: false
+		selected_first_dialog: false,
+		isSearchingMessages: false
       });
       this.handleScrollPrev = this.handleScrollPrev.bind(this);
       this.handleScrollDlg = this.handleScrollDlg.bind(this);
@@ -59,74 +60,69 @@ class Im extends Component {
   }
 
 
-  componentDidMount(){
-
-    MessagesStore.on("hideMenu",() =>{
-      this.setState({
-          hideMenu: MessagesStore.getMenuStatus()
-      });
-    });
-
-
-    MessagesStore.on("changeDialogHeight",(h) =>{
-      this.setHeight(h);
-    });
-
-    
-
-    MessagesStore.on("dlgMessageSelected",(c) =>{
-      this.setState({
+  
+  
+  setSelectedMessages(c){
+	  this.setState({
           isSelectedMessages: c
       });
-    });
-    MessagesStore.on("selectedMessagesReset",() =>{
-      this.setState({
+  }
+  
+  resetSelectedMessages(){
+	  this.setState({
           isSelectedMessages: 0
       });
-    });
-	
-	MessagesStore.on("loaded_chat_users",(u) =>{
-      this.setState({
+  }
+  
+  setRemovingUsersFromChat(u){
+	  this.setState({
           isRemovingUsersFromChat: true
       });
-    });
-	
-	MessagesStore.on("addedDlgMessages",() =>{
-      this.setState({
+  }
+  
+  hideProgress(){
+	  this.setState({
           showProgress: false
       });
-    });
+  }
+  
+  
+  	componentWillUnmount(){ 
+	/*	MessagesStore.removeListener("hideMenu",);
+		MessagesStore.removeListener("changeDialogHeight",this.setHeight);
+		MessagesStore.removeListener("dlgMessageSelected",this.setSelectedMessages);
+		MessagesStore.removeListener("selectedMessagesReset",this.resetSelectedMessages);
+		MessagesStore.removeListener("loaded_chat_users",this.setRemovingUsersFromChat);
+		MessagesStore.removeListener("addedDlgMessages",this.hideProgress);*/
+	}
 
 	
+  componentDidMount(){
+    MessagesStore.on("hideMenu",() => { this.setState({
+          hideMenu: MessagesStore.getMenuStatus()
+		})});
+    MessagesStore.on("changeDialogHeight",() => { this.setHeight() } );
+    MessagesStore.on("dlgMessageSelected",(c) => { this.setSelectedMessages(c) });
+    MessagesStore.on("selectedMessagesReset", () => { this.resetSelectedMessages() });
+    MessagesStore.on("loaded_chat_users",(e) => { this.setRemovingUsersFromChat(e) });
+	MessagesStore.on("addedDlgMessages",() => { this.hideProgress() } );
 
 	dispatcher.register( dispatch => {
         if ( dispatch.type === 'SHOW_PROGRESS' ) {
           this.setState({ showProgress: true })
         }
-      });
-	  
-	  dispatcher.register( dispatch => {
         if ( dispatch.type === 'HIDE_PROGRESS' ) {
           this.setState({ showProgress: false })
         }
-      });
-	  
-     dispatcher.register( dispatch => {
         if ( dispatch.type === 'HIDE_BACK_BTN' ) {
           this.setState({ hideMenu: false })
 		  if (this.state.isCreatingChat){
 				//cancel creating chat
 		  }
         }
-      });
-
-     dispatcher.register( dispatch => {
         if ( dispatch.type === 'SHOW_BACK_BTN' ) {
           this.setState({ hideMenu: !this.state.hideMenu})
         }
-      });
-
-     dispatcher.register( dispatch => {
         if (dispatch.type === 'SELECT_DIALOG'){
 			this.setState({
 				showSendMessagePanel: true,
@@ -140,19 +136,6 @@ class Im extends Component {
             this.setState({ isSelectedMessages: 0,
               selectedConversation: MessagesStore.getSelectedConversation()})
         }
-      }); 
-
-      /*dispatcher.register( dispatch => {
-        if (dispatch.type === 'START_SELECTING_DIALOG_MESSAGES'){
-          if (this.state.isSelectedMessages === true){
-            MessagesStore.resetSelectedMessages();
-            this.setState({
-              isSelectedMessages: false
-            });
-          }
-        }
-      });*/   
-      dispatcher.register( dispatch => {
         if (dispatch.type === 'CREATE_CHAT'){
 			if (!this.state.selected_first_dialog && !dispatch.chatState) {
 				this.setState({
@@ -163,16 +146,11 @@ class Im extends Component {
             isCreatingChat: dispatch.chatState
           });
         }
-      });
-	  
-	  dispatcher.register( dispatch => {
-        if (dispatch.type === 'ADDING_CHAT_USER'){
+		if (dispatch.type === 'ADDING_CHAT_USER'){
           this.setState({
             isAddingUserToChat: dispatch.adding 
           });
         }
-      });
-	  dispatcher.register( dispatch => {
         if (dispatch.type === 'REMOVING_CHAT_USER'){
 			if (dispatch.removing == false){
 				this.setState({currentChatUsers: []});
@@ -181,7 +159,16 @@ class Im extends Component {
             isRemovingUsersFromChat: dispatch.removing
           });
         }
+        if (dispatch.type === 'SHOW_SEARCH_DIALOG_MESSAGES'){
+          this.setState({
+            isSearchingMessages: dispatch.startedSearching
+          });
+        }
+		
+		
+		
       });
+	  
       
       SearchDialogStore.on("SEARCH_DIALOG_STARTED",(h) =>{
        this.setState({
@@ -226,6 +213,7 @@ class Im extends Component {
     return (
     	<div className="main_im_div" >
       		<div className="content">
+			{ (!this.state.isSearchingMessages) ?
             <div className="container left">
 				{
 				(!this.state.isRemovingUsersFromChat) ? 
@@ -257,25 +245,36 @@ class Im extends Component {
 					
 					
               </div>
-            </div>
+            </div> : ""
+			}
 			{
             (!this.state.showProgress) ?
             <div className={(!this.state.hideMenu) ? 'container right' : 'container right hide'} id="cRight">
 			
+			{
+				(!this.state.isSearchingMessages || this.state.isCreatingChat)?
+				
+			
               <div style={this.state.divstyle}  onScroll={this.handleScrollDlg} id="dialog_container_div" className="dialog_container_div">
-              { (!this.state.isCreatingChat) ? 
+              { (!this.state.isCreatingChat && !this.state.isSearchingMessages) ? 
                 <DialogContainer />
                : ""}
 
                { 
-                (this.state.isCreatingChat) ? 
+                (this.state.isCreatingChat && !this.state.isSearchingMessages ) ? 
                   <CreateChatContainer />
                   : ""
                 }
-
-              </div>
+              </div> : ""
+			}
+			  
 			  {
-			  (this.state.showSendMessagePanel) ?
+				(this.state.isSearchingMessages && !this.state.isCreatingChat)?
+					<SearchDialogMessages /> : ""
+				}
+				
+			  {
+			  (this.state.showSendMessagePanel && !this.state.isSearchingMessages) ?
               <div className="im_panel">
                   <SendMessagePanel isCreatingChat={this.state.isCreatingChat} setHeight={this.setHeight} attachments="" selectedMessages={this.state.isSelectedMessages} /> 
               </div> : "" 

@@ -9,6 +9,8 @@ class UsersStore extends EventEmitter{
 		this.users = [];
 		this.me = [];
 
+		this.groups = [];
+		
 		this.userstoadd = [];
 	}
 
@@ -19,6 +21,15 @@ class UsersStore extends EventEmitter{
 	getById(id){
 		return this.users.find(u => u.uid === id)
 	}
+	
+	getGroups(){
+		return this.groups;
+	}
+	
+	getGroupById(gid){
+		return this.groups.find(g => g.gid === gid)
+	}
+	
 	add(u){
 		this.users = this.users.concat(u);
 		this.emit("addedUsers");
@@ -34,6 +45,12 @@ class UsersStore extends EventEmitter{
 		return this.me;
 	}
 
+	
+	addUserImmediately(id){
+		this.addUserRequest(id);
+		this.loadUsers(this.userstoadd);
+	}
+	
 	parseCheckLoad(j){
 		let uids = this.parseIds(j);
         let check = this.checkUsers(uids);
@@ -75,6 +92,13 @@ class UsersStore extends EventEmitter{
 		//this.prevMsgsCount = c;
 		this.emit("ADDED_USERS");
 	}
+	
+	addGroups(u){
+		this.groups = this.groups.concat(u);
+		
+		
+		this.emit("GROUPS_INFO_ADDED");
+	}
 
 	loadUsers(ids){
 		request.post('/getusers')
@@ -108,6 +132,15 @@ class UsersStore extends EventEmitter{
 		if (this.userstoadd.indexOf(id) == -1)
 			this.userstoadd.push(id)
 
+	}
+	
+	setOnline(uid,status){
+		
+		let u = this.getById(uid);
+		if (u){
+			u.online = status;
+			this.emit("USERS_CHANGED","online",uid,status);
+		}
 	}
 
 	handleActions(a){
