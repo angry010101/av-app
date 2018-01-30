@@ -16,19 +16,33 @@
 	list-style: none;
 	margin: 8px 0px;
 	padding: 0;
+	display: table;
+	width: 100%;
 }
 
 
 .im_expansion_div ul li{
 	font-size: 11pt;
 	height: 36px;
-	width: 100%;
+	/*width: 100%;*/
+	display: table-cell;
+}
+
+.im_expansion_div img{
+	width: 36px;
+	height: 36px;
+}
+
+.ul_inline{
+	text-align: center;
+}
+.attachments_table{
+		display: table;
+		width: 100%;
 }
 
 .im_expansion_div ul a{
-	margin-left: 16px;
 	display: block;
-	padding-top: 8px;
 	color: #06f;
 	font-weight: bold;
 	font-size: 13pt;

@@ -1,4 +1,5 @@
 import MessagesStore from 'js/backend/im/MessagesStore.jsx'
+import UsersStore from 'js/backend/im/UsersStore.jsx'
 
 const request = require('superagent');
 
@@ -41,10 +42,11 @@ export function startLongPollHistory(){
                 }
 				if (window.prevOffset != 0){
 					try{
+					 UsersStore.addUsers(j.profiles);
 					 MessagesStore.parseLPH(j);
 					}
 					catch (ec){
-					  alert(strings.error)
+					  //alert(strings.error)
 					}
 				}
               }

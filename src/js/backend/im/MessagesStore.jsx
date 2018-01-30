@@ -35,13 +35,22 @@ class MessagesStore extends EventEmitter{
 			chat_id: 0,
 			offset: 0
 		},
-
+		
+		this.attachments = []
 		this.selectedMessagesConversation = 0
 		/*
 		this.on("ADDED_USER",(h) =>{
      		 this.startLongPollHistory();
     		});*/
 
+	}
+	
+	
+	resetAttachments(){
+		this.attachments = []
+	}
+	getAttachments(){
+		return this.attachments;
 	}
 	
 	markAsRead(pid,mid){
@@ -87,8 +96,9 @@ class MessagesStore extends EventEmitter{
 	}
 
 	addOrUpdPrevMessages(msgs,profiles,c,toend){
+		
 		for (var i=0;i<c;i++){
-			var cm = this.prevMsgs.find((e) => { return e.chat_id === msgs[i].chat_id && e.chat_id} );
+			var cm = this.prevMsgs.find((e) => { return e.chat_id === msgs[i].chat_id && msgs[i].chat_id} );
 				if (typeof cm != "undefined"){
 					var ind = this.prevMsgs.indexOf(cm);
 					this.prevMsgs.splice(ind,1);
@@ -105,8 +115,9 @@ class MessagesStore extends EventEmitter{
 					continue;
 				}		
 
+				//gid ?? id
 			var cm = this.prevMsgs.find((e) => e.uid === msgs[i].uid);
-
+		
 			if (typeof cm != "undefined"){
 				var ind = this.prevMsgs.indexOf(cm);
 				this.prevMsgs.splice(ind,1);
@@ -271,7 +282,18 @@ class MessagesStore extends EventEmitter{
 
 	addUsers(u){
 		//no update due to offset loading
-		this.users = this.users.concat(u);
+		let tu =[];
+		for (var i=0;i<u.length;i++){
+			if (u[i].last_name == ""){
+				let tu1 = u[i];
+				tu1.id = parseInt(u[i].id) - 1000000000;
+				tu.push(tu1);
+			} 
+			else {
+				tu.push(u[i])
+			}
+		}
+		this.users = this.users.concat(tu);
 		//check???
 		//this.prevMsgsCount = c;
 		this.emit("addedUsers");
@@ -397,7 +419,7 @@ class MessagesStore extends EventEmitter{
 	selectDialog(id,cid,mid){
 		this.dlgMsgs = [];
 		window.dlgsOffset=0;
-
+		this.resetAttachments();
 		this.selectedConversation = {
 			uid: id,
 			chat_id: cid
@@ -445,7 +467,8 @@ class MessagesStore extends EventEmitter{
 					let b = [];
 						let i=1;
 						while(typeof j[i] != "undefined") {
-							b.push(j[i]);
+							let temp_elem = j[i];							
+							b.push(temp_elem);
 						i++;
 					}
 				
@@ -455,7 +478,8 @@ class MessagesStore extends EventEmitter{
 
 						alert("There's no " + window.att_method + "s there");
 				}
-					this.emit("dialogAttachmentsResponse",b);
+				this.attachments = this.attachments.concat(b);
+					this.emit("dialogAttachmentsResponse");
 				  window.att_offset = j.next_from;
 				  window.startedLoadingMoreDlgsAtt = false;
                 }

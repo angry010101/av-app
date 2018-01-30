@@ -7,6 +7,7 @@ import * as DialogActions from 'js/backend/im/DialogActions.jsx'
 
 import MessagesStore from 'js/backend/im/MessagesStore.jsx'
 
+import UsersStore from 'js/backend/im/UsersStore.jsx'
 
 const styleUnread={
   backgroundColor: "#bcd0ff"
@@ -48,7 +49,7 @@ class Message extends Component {
                   read_state: 0,
                   out: msg.out,
                   selected: false,
-                  user: msg.user,
+                  user: (msg.user) ? msg.user : { "err": 1 },
                   chat_id: msg.chat_id,
                   chat_active: msg.chat_active,
                   users_count: msg.users_count,
@@ -81,8 +82,15 @@ class Message extends Component {
       });
     }*/
 	
-	if (typeof this.state.user == "undefined"){
-		this.setState({ user: []});
+  if (typeof this.state.user == "undefined" || this.state.user.err ){
+		if (parseInt(this.state.uid) < 0){
+			this.setState({
+				user: UsersStore.getById(1000000000 + (parseInt(this.state.uid)*(-1)))
+			})
+			window.test_user = this.state.user;
+			window.test_id = 1000000000 + (parseInt(this.state.uid)*(-1));
+		}
+		/*
 		UsersStore.on("ADDED_USER",(u) => {
 		if ((this.state.chat_id == u.uid && this.state.chat_id > 0) || (this.state.uid == u.uid && this.state.chat_id < 1) || (this.state.gid == u.uid && this.state.chat_id < 1)){
 				this.setState({
@@ -90,7 +98,7 @@ class Message extends Component {
 				})
 			}
 		})
-		UsersStore.addUserImmediately(this.state.uid);
+		UsersStore.addUserImmediately(this.state.uid);*/
 	}
 	
 	MessagesStore.on("user_typing",(uid,cid) => {

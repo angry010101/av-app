@@ -276,7 +276,7 @@ class Im extends Component {
 			  {
 			  (this.state.showSendMessagePanel && !this.state.isSearchingMessages) ?
               <div className="im_panel">
-                  <SendMessagePanel isCreatingChat={this.state.isCreatingChat} setHeight={this.setHeight} attachments="" selectedMessages={this.state.isSelectedMessages} /> 
+                  <SendMessagePanel isCreatingChat={this.state.isCreatingChat} setHeight={this.setHeight} selectedMessages={this.state.isSelectedMessages} /> 
               </div> : "" 
 				}
 				</div> : this.showProgress() }

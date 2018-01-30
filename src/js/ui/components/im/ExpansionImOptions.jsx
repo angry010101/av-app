@@ -73,22 +73,29 @@ class ExpansionImOptions extends Component {
 	}
 
     render() {
-        var text_chat = (this.state.isCreatingChat) ?  strings.cancel_chat : strings.create_chat ;
-		var search_msgs = (!this.state.searchMessages) ?  strings.search : strings.cancel_search ;
+		let photo_search = "http://qwertyangry.pythonanywhere.com/static/images/search_messages.png";
+		let photo_chat = "http://qwertyangry.pythonanywhere.com/static/images/plus.ico";
+		
+        let text_chat = (this.state.isCreatingChat) ?  strings.cancel_chat : strings.create_chat ;
+		let search_msgs = (!this.state.searchMessages) ?  strings.search : strings.cancel_search ;
+		if (this.state.isCreatingChat || this.state.searchMessages) { 
+			photo_chat = "http://qwertyangry.pythonanywhere.com/static/images/cancel.png"
+			photo_search = photo_chat;
+		} 
         return (
             <div>
-              <ul>
+              <ul className="ul_inline">
 				{
 					(!this.state.searchMessages) ? 
-					<div>
-						<li><a onClick={(e) => this.handleCreateChat(e) }>{text_chat}</a></li> 
+					<div style={{"display": "table-cell"}}>
+						<li  style={{"display": "block"}}><a onClick={(e) => this.handleCreateChat(e) }><img src={photo_chat} title={text_chat}/></a></li> 
 					</div> : ""
 				}
 				{
 					
 					(!this.state.isCreatingChat) ?
-					<div>
-						<li><a onClick={(e) => this.handleCreateSearch(e) }>{search_msgs}</a></li>					
+					<div style={{"display": "table-cell"}}>
+						<li  style={{"display": "block"}}><a onClick={(e) => this.handleCreateSearch(e) }><img src={photo_search} title={search_msgs}/></a></li>					
 					</div> : "" 
 				}
               </ul>

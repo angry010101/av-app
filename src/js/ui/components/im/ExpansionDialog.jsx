@@ -62,7 +62,8 @@ class ExpansionDialog extends Component {
             isCreatingChat: false,
 			selectedConversation: MessagesStore.getSelectedConversation(),
 			isAddingChatUser: false,
-			isRemovingChatUser: false
+			isRemovingChatUser: false,
+			showingAttachment: false
         });
     }
 
@@ -85,12 +86,21 @@ class ExpansionDialog extends Component {
 
 		switch(param){
 			case "doc":
+				this.setState({
+					showingAttachment: true
+				});
 				MsgActions.showDialogAttachments("doc");
 				break;
 			case "photos":
+				this.setState({
+					showingAttachment: true
+				});
 				MsgActions.showDialogAttachments("photo");
 				break;
 			case "videos":
+				this.setState({
+					showingAttachment: true
+				});
 				MsgActions.showDialogAttachments("video");			
 				break;
 			case "chat_add_user":
@@ -119,6 +129,9 @@ class ExpansionDialog extends Component {
 				MsgActions.changeChatTitle();
 				break;
 			case "back":
+				this.setState({
+					showingAttachment: false
+				});
 				MsgActions.clearAttachments();
 				break;
 			default:
@@ -129,13 +142,14 @@ class ExpansionDialog extends Component {
     render() {
         return (
             <div>
-              <ul>
-			  { (this.state.selectedConversation.uid > 0 || this.state.selectedConversation.chat_id > 0) ? 
-                <div><li><a onClick={(e) => this.handleClick(e,"doc")}>{strings.documents}</a></li>
-                <li><a onClick={(e) => this.handleClick(e,"photos")}>{strings.photos}</a></li>
-                <li><a onClick={(e) => this.handleClick(e,"videos")}>{strings.videos}</a></li>
-				<li><a onClick={(e) => this.handleClick(e,"back")}>{strings.return_to_conversation}</a></li>
-					</div> : ""
+              <ul className="ul_inline">
+			  { (this.state.selectedConversation.uid != 0 || this.state.selectedConversation.chat_id > 0) ? 
+                (!this.state.showingAttachment) ? 
+                <div className="attachments_table">
+                <li><a onClick={(e) => this.handleClick(e,"photos")}><img src="http://qwertyangry.pythonanywhere.com/static/images/photos.png" title={strings.photos}/></a></li>
+                <li><a onClick={(e) => this.handleClick(e,"videos")}><img src="http://qwertyangry.pythonanywhere.com/static/images/video.png" title={strings.videos}/></a></li>
+				<li><a onClick={(e) => this.handleClick(e,"doc")}><img src="http://qwertyangry.pythonanywhere.com/static/images/docs.svg" title={strings.documents}/></a></li>
+					</div> : <div className="attachments_table"><li><a onClick={(e) => this.handleClick(e,"back")}><img src="http://qwertyangry.pythonanywhere.com/static/images/return.png" title={strings.return_to_conversation}/></a></li></div> : ""
 			  }
 				{
 					(this.state.selectedConversation.chat_id > 0) ? 

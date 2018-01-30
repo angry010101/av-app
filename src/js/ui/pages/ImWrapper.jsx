@@ -62,7 +62,8 @@ class ImWrapper extends Component {
       <div>
 		<Header />
         <LightboxFwdMsgs i={this.state.fwdMsg }/>     
-        <LightboxPictures images={this.state.SVimages} currentImg={this.state.SVcurrentImg} show={this.state.SVshow} changeImage={(e) => this.chImg(e)}/>
+        <LightboxPictures images={this.state.SVimages} currentImg={this.state.SVcurrentImg} show={this.state.SVshow} 
+		changeImage={(e) => this.chImg(e)}/>
         <Im />
       </div>
     );

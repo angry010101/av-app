@@ -13,6 +13,7 @@ export function selectDialog(id,chat_id,mid){
 		chat_id,
 		mid
 	});
+	
 }
 
 export function selectDialogMessage(mid){
@@ -58,7 +59,7 @@ export function showDialogAttachments(t){
 }
 
 export function clearAttachments(){
-	window.att_emthod = "";
+	window.att_method = "";
 	window.att_offset = "";
 	dispatcher.dispatch({
 		type: "CLEAR_ATTACHMENTS"

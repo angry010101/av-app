@@ -81,6 +81,10 @@
 	text-overflow: ellipsis;
 	vertical-align: top;
 	max-width: 100%;
+	
+	padding-left: 4px;
+	padding-bottom: 1px;
+	padding-top: 1px;
 }
 
 .prev_date_text {

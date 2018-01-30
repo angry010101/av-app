@@ -9,7 +9,7 @@ import Audio from 'js/ui/components/im/Audio.jsx' ;
 import Video from 'js/ui/components/im/Video.jsx' ;
 
 import DocAttachment from 'js/ui/components/im/DocAttachment.jsx' ;
-
+import MessagesStore from 'js/backend/im/MessagesStore.jsx'
 
 import 'css/components/im/dialog_attachment.css' ;
 
@@ -22,6 +22,18 @@ class DialogAttachments extends Component {
     this.allPhotos = true;
     this.images = [];
 	this.counter = 0;
+	
+	this.state={
+		attachments: []
+	}
+  }
+  
+  componentDidMount(){
+	  MessagesStore.on("dialogAttachmentsResponse",(data) =>{
+			this.setState({
+				attachments: MessagesStore.getAttachments() //this.state.dialogAttachments.concat(data)
+			});
+		});
   }
 
   select(t,c){ 
@@ -36,7 +48,7 @@ class DialogAttachments extends Component {
             return <PhotoAttachment images={this.images} info={this.props.info[0].photo} isbig="1"/>;
           }
           else {*/
-            return <PhotoAttachment images={this.images} currentImg={counter} info={t.photo} isbig="0"/>
+            return <PhotoAttachment images={(this.props.container) ?  this.state.attachments : this.props.info } currentImg={counter} info={t.photo} isbig="0"/>
           //}
         case "wall":
           return <WallAttachment info={t.wall}/>
@@ -61,7 +73,7 @@ class DialogAttachments extends Component {
 
   componentWillMount(){
     this.curr = 0;
-    this.props.info.map(e => this.createImageArr(e));
+    //this.props.info.map(e => this.createImageArr(e));
   }
 
   createImageArr(e){
@@ -89,12 +101,12 @@ class DialogAttachments extends Component {
     this.curr = 0;
   }
 
-          
+     
     bigPic(){
-      return <div><br /><PhotoAttachment images={this.images} info={this.props.info[0].photo} isbig="1"/></div>
+      return <div><br /><PhotoAttachment images={this.images} info={this.props.info} isbig="1"/></div>
     }
 
-
+	
   render() {
     /*if (this.props.info[0].type == "photo") {
       this.curr=-1; 
@@ -113,17 +125,17 @@ class DialogAttachments extends Component {
 		return 	this.bigPic()		
 	}
 
-
-    return (
-      <div className="attachments_wrapper"><br />
-        {
-          (this.count != 1) ? (
-         (!this.allPhotos) ?
+	if (this.count != 1){
+	   return (!this.allPhotos) ?
           this.props.info.map((e) => this.select(e,this.count)) 
           : <div className="div_photoset">
             { this.props.info.map((e) => this.select(e,this.count)) }
-          </div> ) 
-          :  (this.props.info[0].type != "photo") ? <div>
+          </div> 
+	}
+
+    return (
+      <div className="attachments_wrapper"><br />
+        { (this.props.info[0].type != "photo") ? <div>
             { this.props.info.map((e) => this.select(e,this.count)) }
             </div> : ""
         }    

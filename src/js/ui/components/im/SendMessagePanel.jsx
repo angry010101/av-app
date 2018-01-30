@@ -23,19 +23,22 @@ let strings = new LocalizedStrings({
    your_message:"Your message...",
    chat_title: "Enter chat title here...",
    error: "Oh no! An error happened.",
-   uploaded: "File is successfully uploaded"
+   uploaded: "File is successfully uploaded",
+   file_upload_attention: "Only one attached file is possible. Are you sure you want to overrite attached file?"
  },
  ua: {
    your_message:"Ваше повідомлення...",
    chat_title: "Будь ласка, введіть назву бесіди...",
    error: "О ні! Трапилася помилка",
-   uploaded: "Файл завантажений"
+   uploaded: "Файл завантажений",
+   file_upload_attention: "Дозволено відправляти лише один файл за повідомлення. Ви певні, що хочете відправити інший файл?"
  },
  ru: {
    your_message:"Ваше сообщение...",
    chat_title: "Введите название чата...",
    error: "О нет! Случилась ошибка",
-   uploaded: "Файл успешно загружен"
+   uploaded: "Файл успешно загружен",
+   file_upload_attention: "Разрешено отправлять только один файл за одно сообщение. Вы уверены что хотите перезаписать прикрепленный файл?"
  }
 });
 
@@ -59,7 +62,9 @@ class SendMessagePanel extends Component {
 			messageText: "",
 			message: {},
 			
-			isUploading: false
+			isUploading: false,
+			attachments: [],
+			type: "" 
 		};
 	}
 
@@ -98,6 +103,13 @@ class SendMessagePanel extends Component {
   	e.preventDefault();
 	MessagesStore.resetSelectedMessages();  	
   }
+  
+  cancelAttachments(e){
+  	e.preventDefault();
+	window.photo_id = "";
+	this.setState({ type: ""});
+	}
+  
 
 	autoGrow(element) {
 	this.setState({
@@ -127,8 +139,23 @@ class SendMessagePanel extends Component {
     		this.clickSendBtn(e);
     	}
 	}
+	
+	addAttachment(s){
+		let tarr = this.state.attachments;
+		tarr.push(s)
+		this.setState({
+			 attachments: tarr
+		});
+		
+		window.test_attachment = this.state.attachments
+	}
 
 	handleChangeAttachments(e,a){
+		e.preventDefault();
+		if (this.state.attachments.length > 0){
+			var r = confirm(strings.file_upload_attention);
+			if (!r) return;
+		}
 		window.photo_id = "";
 		var files
 		if (a == "paste") {
@@ -157,15 +184,34 @@ class SendMessagePanel extends Component {
                  	alert(strings.error);
                  	return;
                  }
+				 if (j[0]){
+					 if (typeof j[0].id == "undefined"){
+						 this.setState({
+							 type: "doc"
+						 })
+						this.addAttachment("doc" + j[0].owner_id + "_" + j[0].did);
+						window.photo_id = "doc" + j[0].owner_id + "_" + j[0].did ; 
+					 }
+					 else {
+						 this.setState({
+							 type: "photo"
+						 })
+						 this.addAttachment(j[0].id);
+					
+						window.photo_id += j[0].id ;
+					 }
+				 }
+				 else {
+					 this.setState({
+							 type: "audio"
+						 })
+						
+					this.addAttachment("audio" + j.owner_id + "_" + j.aid);
+					 window.photo_id = "audio" + j.owner_id + "_" + j.aid 
+				 }
                 /* if (window.photo_id != "" && typeof window.photo_id != "undefined" && window.photo_id) 
                  			window.photo_id += ", ";*/
-                 if (typeof j[0].id == "undefined"){
-                 	
-                 	 window.photo_id = "doc" + j[0].owner_id + "_" + j[0].did ; 
-                 }
-                 else {
-                	 window.photo_id += j[0].id ;
-                 }
+                 
                  alert(strings.uploaded);
               }
 			  
@@ -239,7 +285,7 @@ class SendMessagePanel extends Component {
 					}
 				</div>
 				{
-				(this.props.selectedMessages || this.props.attachments.length > 0) ?	
+				(this.props.selectedMessages || this.state.type != "") ?	
 				
 				<div style={{display: "block"}}  className="dlg_user_actions_wrapper" id="dlg_user_action">
 					<div className="dlg_user_actions">
@@ -252,10 +298,11 @@ class SendMessagePanel extends Component {
 						 	</span>
 						</li>
 						: "" }
-						{(this.props.attachments.length > 0) ?
+						{(this.state.type != "") ?
 						<li className="attachment_li">
 							<span className="fwd_messages_label">
-								Attachments {this.props.attachments.length } 
+								Attachments {this.state.type}
+								<a onClick={(e) => this.cancelAttachments(e)}> X</a>
 						 	</span>
 						</li>
 						: "" }

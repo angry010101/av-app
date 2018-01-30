@@ -143,7 +143,7 @@ class DialogMessage extends Component {
               </div>
               
               <div className="msg_content">
-                <div className="msg_text">
+                <div className={(this.state.read_state == 0) ? "msg_text unread" : "msg_text"}>
                   { 
                     (typeof this.state.body != "undefined" && this.state.body != "" ) ?
                     this.state.body.split("<br>").map(function(item) {

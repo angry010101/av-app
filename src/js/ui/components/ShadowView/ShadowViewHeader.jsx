@@ -22,9 +22,9 @@ class ShadowViewHeader extends Component {
         return (
             <div className="shadow_view_header">
                 <a className="shadow_title">
-                	Lorem is isput taadadam...
+                	
                 </a>
-                <a className="shadow_closeBtn" onClick={this.handleClose}>
+                <a className="shadow_closeBtn" onClick={(e) => this.handleClose(e)}>
                 	X
                 </a>
             </div>

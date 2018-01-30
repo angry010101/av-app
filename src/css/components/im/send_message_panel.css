@@ -13,6 +13,7 @@
 	/*padding-bottom: 18px;*/
 	padding-top: 4px;
 	padding-bottom: 6px;
+	border-top: 1px #9295f1 solid;
 }
 
 .send_msg_block textarea{
@@ -26,6 +27,9 @@
 	border: 3px solid #c1c3c5;
 	margin-left: 4px;
 	margin-top: 4px;
+	font-family: sans-serif;
+	padding-left: 6px;
+	padding-top: 3px;
 }
 
 .btn_attachments{

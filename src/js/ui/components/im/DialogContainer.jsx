@@ -96,9 +96,8 @@ class DialogContainer extends Component {
 
 	 
 		MessagesStore.on("dialogAttachmentsResponse",(data) =>{
-			window.test_dialogAttachments = data;
 			this.setState({
-				dialogAttachments: this.state.dialogAttachments.concat(data)
+				dialogAttachments: MessagesStore.getAttachments() //this.state.dialogAttachments.concat(data)
 			});
 		});
 
@@ -143,12 +142,12 @@ class DialogContainer extends Component {
 	 
 	 
 	dialogAttachmentsFun(props) {
-		var data =  this.state.dialogAttachments;
+	  var data =  this.state.dialogAttachments;
       const a = data;
 	  
 	  if (typeof a[0] == "undefined") return this.emptyDiv(window.att_method);
 		  
-	  return <div><DialogAttachments info={a}/>
+	  return <div><DialogAttachments container={true} info={a}/>
 		  <a onClick={(e) => startLoadingDialogMessages()} style={ style_load_documents_link} >{strings.load_more}</a></div>
 	}
 	

@@ -96,7 +96,7 @@ class MessagesPreviewContainer extends MessagesContainer {
     const msgs = this.state.msgs;
 	const count = this.state.msgscount;
     const listItems = msgs.map((message) => 
-      this.ListItem(message,message.mid) 
+      this.ListItem(message,(message.chat_id) ? message.chat_id + 10000000000 :  message.mid)
     );
   
     return (

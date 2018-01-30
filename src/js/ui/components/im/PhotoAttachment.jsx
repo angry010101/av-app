@@ -11,18 +11,62 @@ import Lightbox from 'react-images';
 
 import dispatcher from "js/backend/Dispatcher.jsx"
 
-
+import MessagesStore from 'js/backend/im/MessagesStore.jsx'
 class PhotoAttachment extends Component {
   constructor(props) {
     super(props);
+	
   }
 
+  
+  componentDidMount(){
+	
+  }
+  
   handleClick(e){
     e.preventDefault();
     e.stopPropagation();
+	
+	
+	if (this.props.isbig == 1){
+		let element = this.props.info[0].photo ;
+
+		
+		element.srcSet = []
+		if (element.src_small) element.srcSet.push(element.src_small + " 320w") 
+		if (element.src_big) element.srcSet.push(element.src_big + " 500w")
+		if (element.src_xbig) element.srcSet.push(element.src_xbig + " 800w")
+		if (element.src_xxbig) element.srcSet.push(element.src_xxbig + " 1024w")
+		
+		 dispatcher.dispatch({
+			type: 'showShadowView',
+			images: [element],
+			currentImg: 0
+			})
+		
+		return ;
+	}
+	let arr = [];
+	let imgs = this.props.images;
+	if (imgs.length == 0){
+		imgs = MessagesStore.getAttachments();
+	}
+	for (var i = 0; i< imgs.length; i++){
+		let element = imgs[i].photo ;
+
+		
+		element.srcSet = []
+		if (element.src_small) element.srcSet.push(element.src_small + " 320w") 
+		if (element.src_big) element.srcSet.push(element.src_big + " 500w")
+		if (element.src_xbig) element.srcSet.push(element.src_xbig + " 800w")
+		if (element.src_xxbig) element.srcSet.push(element.src_xxbig + " 1024w")
+		
+		arr.push(element);
+	
+	}
     dispatcher.dispatch({
       type: 'showShadowView',
-      images: this.props.images,
+      images: arr,
       currentImg: this.props.currentImg
     })
 
@@ -33,7 +77,7 @@ class PhotoAttachment extends Component {
       <div className="attachment_img_wrapper" onClick={(e) => this.handleClick(e)}>
       {
         (this.props.isbig == 1) ? 
-        <img className="photo_attachment_img_big" src={this.props.info.src_big} /> :
+        <img className="photo_attachment_img_big" src={this.props.info[0].photo.src_big} /> :
         <img className="photo_attachment_img" src={this.props.info.src} /> 
       }
       </div>
