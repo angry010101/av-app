@@ -10,7 +10,7 @@ window.timeSearch = 601;
 var tid;
 var isstartedsearch= false;
 
-export function searchMessages(q){
+export function searchMessages(q,d,pid){
 	if (q == ""){
 		SearchMessagesStore.parseEmpty();
 		return ;
@@ -21,7 +21,7 @@ export function searchMessages(q){
   }
 	SearchMessagesStore.startSearching(q);
 	var f1000 = delay(f,window.timeSearch);
-	f1000(q);
+	f1000(q,d,pid);
 
 }
 
@@ -41,14 +41,14 @@ function delay(f, ms) {
 }
 
 
-function f(q){
+function f(q,d,pid){
 	isstartedsearch = true;
 	/*alert("request messages");
 	isstartedsearch = false;
 	*/
 	request.post('/messages_search')
             .set('Content-Type', 'application/x-www-form-urlencoded')
-            .send({ q: q, offset: 0})
+            .send({ q: q, offset: 0, date: d,peer_id: pid})
             .end(function(err, res){
               if (err || !res.ok) {
                  alert('Oh no! error');

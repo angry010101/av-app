@@ -18,14 +18,17 @@ import { startLoadingDialogMessages } from 'js/backend/im/LoadDialogMessages.jsx
 import { startLoadingPreviewMessages } from 'js/backend/im/LoadPreviewMessages.jsx'
 import CreateChatContainer from 'js/ui/components/im/CreateChatContainer.jsx'
 
-const progressLink = "http://qwertyangry.pythonanywhere.com/static/images/circle-loading.gif";
+const progressLink = "/static/images/circle-loading.gif";
 const progressStyle = {
 	"margin-top": "8%",
 	"width": "48px",
-	"height": "48px"
+	"height": "48px",
+	"text-align": "center",
 }
 const progressDiv = {
-	"text-align": "center"
+	"text-align": "center",
+	"width": "100%",
+	"display": "block"
 }
 
 
@@ -51,7 +54,9 @@ class Im extends Component {
 		showSendMessagePanel: false,
 		showProgress: false,
 		selected_first_dialog: false,
-		isSearchingMessages: false
+		isSearchingMessages: false,
+		
+		search_peer: ""
       });
       this.handleScrollPrev = this.handleScrollPrev.bind(this);
       this.handleScrollDlg = this.handleScrollDlg.bind(this);
@@ -142,6 +147,11 @@ class Im extends Component {
 					showSendMessagePanel: false
 				});				
 			}
+			else {
+				this.setState({
+					showSendMessagePanel: true
+				});				
+			}
           this.setState({
             isCreatingChat: dispatch.chatState
           });
@@ -161,7 +171,8 @@ class Im extends Component {
         }
         if (dispatch.type === 'SHOW_SEARCH_DIALOG_MESSAGES'){
           this.setState({
-            isSearchingMessages: dispatch.startedSearching
+            isSearchingMessages: dispatch.startedSearching,
+			search_peer: dispatch.pid
           });
         }
 		
@@ -183,12 +194,7 @@ class Im extends Component {
 
   }
 
-  setHeight(e){
-    this.setState({divheight: e});
-    let s = "calc(100% - " + parseInt(this.state.divheight) + "px)";
-    this.setState({divstyle: {"height": s }});
-  }
-
+ 
   handleScrollPrev(e){
       var myDiv = document.getElementById("prev_msg_container");
       if (myDiv.offsetHeight + myDiv.scrollTop >= myDiv.scrollHeight - 100) {
@@ -210,6 +216,23 @@ class Im extends Component {
   }
 
   render() {
+	let divCreateChatStyle = {}; 
+	if  (this.state.isCreatingChat && !this.state.isSearchingMessages ) { 
+		/*divCreateChatStyle = {
+			"display": "grid"
+		} */
+	} 
+	
+	let imPanelCreateChat = {};
+	if  (this.state.isCreatingChat && !this.state.isSearchingMessages ) { 
+		/*imPanelCreateChat = {
+			"height": "62px",
+			"position": "absolute",
+			"bottom": "0",
+			"width": "100%"
+		}*/
+	}
+
     return (
     	<div className="main_im_div" >
       		<div className="content">
@@ -247,19 +270,25 @@ class Im extends Component {
               </div>
             </div> : ""
 			}
+			
 			{
-            (!this.state.showProgress) ?
-            <div className={(!this.state.hideMenu) ? 'container right' : 'container right hide'} id="cRight">
+				(this.state.isSearchingMessages && !this.state.isCreatingChat)?
+					<SearchDialogMessages peer={this.state.search_peer} /> : ""
+				}
+				
+				
+			{
+            (!this.state.showProgress && !(this.state.isSearchingMessages && !this.state.isCreatingChat) ) ?
+            <div style={divCreateChatStyle} className={(!this.state.hideMenu) ? 'container right' : 'container right hide'} id="cRight">
 			
 			{
 				(!this.state.isSearchingMessages || this.state.isCreatingChat)?
 				
 			
-              <div style={this.state.divstyle}  onScroll={this.handleScrollDlg} id="dialog_container_div" className="dialog_container_div">
+              <div onScroll={this.handleScrollDlg} id="dialog_container_div" className="dialog_container_div">
               { (!this.state.isCreatingChat && !this.state.isSearchingMessages) ? 
                 <DialogContainer />
                : ""}
-
                { 
                 (this.state.isCreatingChat && !this.state.isSearchingMessages ) ? 
                   <CreateChatContainer />
@@ -268,18 +297,15 @@ class Im extends Component {
               </div> : ""
 			}
 			  
-			  {
-				(this.state.isSearchingMessages && !this.state.isCreatingChat)?
-					<SearchDialogMessages /> : ""
-				}
+			  
 				
 			  {
 			  (this.state.showSendMessagePanel && !this.state.isSearchingMessages) ?
-              <div className="im_panel">
+              <div style={ imPanelCreateChat } className="im_panel">
                   <SendMessagePanel isCreatingChat={this.state.isCreatingChat} setHeight={this.setHeight} selectedMessages={this.state.isSelectedMessages} /> 
               </div> : "" 
 				}
-				</div> : this.showProgress() }
+				</div> : (!this.state.isSearchingMessages || this.state.isCreatingChat) ? this.showProgress() : "" }
 			     
          </div>
       </div>

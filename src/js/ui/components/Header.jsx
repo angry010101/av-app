@@ -13,6 +13,9 @@ import HeaderActions from 'js/backend/HeaderActions.jsx'
 import 'css/components/header.css';
 
 
+import LocalizedStrings from 'react-localization';
+ 
+var i = 0;
 class Header extends Component {
     constructor(){
         super();
@@ -27,26 +30,12 @@ class Header extends Component {
         this.changeSearch = this.changeSearch.bind(this);
     }
 
-    expClick(e){
-        if (!this.state.isShown){
-            this.setState({
-                showExp: ({
-                    "display": "block"
-                }),
-                isShown: !this.state.isShown
-            });
-        }  
-        else {
-            this.setState({
-                showExp: ({
-                    "display": "none"
-                }),
-                isShown: !this.state.isShown
-            });
-        }
-    }
+	changeLanguage(){
+	}
 
     showSearch(e){
+
+		this.changeLanguage();
 		//to work uncomment
         /*this.setState({
             showSearch: !this.state.showSearch
@@ -74,6 +63,8 @@ class Header extends Component {
                 ({"display": "block"}); 
 
         return (
+			<div>
+			<div className="header_block"></div>
             <div className="header">
                
                 {
@@ -94,9 +85,9 @@ class Header extends Component {
                 <div style={hideButtonWhenSearch} className="main_header_content_wrapper">
                     <MainHeaderContent hideBtn={this.props.hideBtn} navMenuEnabled={this.props.navMenuEnabled} />
                 </div>
-                <a onClick={(e) => this.expClick(e)} class="expansion">...</a>  
-                 <div style={this.state.showExp}><ImExpansion /></div>
+                <ImExpansion />
             </div>
+			</div>
     );
   }
 }

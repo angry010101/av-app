@@ -146,31 +146,32 @@ class ExpansionDialog extends Component {
 			  { (this.state.selectedConversation.uid != 0 || this.state.selectedConversation.chat_id > 0) ? 
                 (!this.state.showingAttachment) ? 
                 <div className="attachments_table">
-                <li><a onClick={(e) => this.handleClick(e,"photos")}><img src="http://qwertyangry.pythonanywhere.com/static/images/photos.png" title={strings.photos}/></a></li>
-                <li><a onClick={(e) => this.handleClick(e,"videos")}><img src="http://qwertyangry.pythonanywhere.com/static/images/video.png" title={strings.videos}/></a></li>
-				<li><a onClick={(e) => this.handleClick(e,"doc")}><img src="http://qwertyangry.pythonanywhere.com/static/images/docs.svg" title={strings.documents}/></a></li>
-					</div> : <div className="attachments_table"><li><a onClick={(e) => this.handleClick(e,"back")}><img src="http://qwertyangry.pythonanywhere.com/static/images/return.png" title={strings.return_to_conversation}/></a></li></div> : ""
+                <li><a onClick={(e) => this.handleClick(e,"photos")}><img src="/static/images/photos.png" title={strings.photos}/></a></li>
+                <li><a onClick={(e) => this.handleClick(e,"videos")}><img src="/static/images/video.png" title={strings.videos}/></a></li>
+				<li><a onClick={(e) => this.handleClick(e,"doc")}><img src="/static/images/docs.svg" title={strings.documents}/></a></li>
+					</div> : <div className="attachments_table"><li><a onClick={(e) => this.handleClick(e,"back")}><img src="/static/images/return.png" title={strings.return_to_conversation}/></a></li></div> : ""
 			  }
 				{
+					
 					(this.state.selectedConversation.chat_id > 0) ? 
-						<div>
+						<div className="attachments_table">
 						{
 							(!this.state.isRemovingChatUser) ? 
 							(!this.state.isAddingChatUser) ? 
-						<li><a onClick={(e) => this.handleClick(e,"chat_add_user")}>{strings.add_users}</a></li>
+						<li><a onClick={(e) => this.handleClick(e,"chat_add_user")}><img src="/static/images/add-user.svg" title={strings.add_users}/></a></li>
 						: 
-						<li><a onClick={(e) => this.handleClick(e,"chat_add_user_cancel")}>{strings.cancel_adding_users}</a></li>
+						<li><a onClick={(e) => this.handleClick(e,"chat_add_user_cancel")}><img src="/static/images/cancel.png" title={strings.cancel_adding_users}/></a></li>
 						: ""
 						}
 						{(!this.state.isAddingChatUser) ?
 							(!this.state.isRemovingChatUser) ? 
-								<li><a onClick={(e) => this.handleClick(e,"chat_remove_user")}>{strings.remove_users}</a></li>
+								<li><a onClick={(e) => this.handleClick(e,"chat_remove_user")}><img src="/static/images/remove-user.png" title={strings.remove_users}/></a></li>
 							:
-								<li><a onClick={(e) => this.handleClick(e,"chat_remove_user_cancel")}>{strings.cancel_removing_users}</a></li>
+								<li><a onClick={(e) => this.handleClick(e,"chat_remove_user_cancel")}><img src="/static/images/cancel.png" title={strings.cancel_removing_users}/></a></li>
 								: ""
 						}
 						{/*<li><a onClick={(e) => this.handleClick(e,"chat_change_cover")}>Change cover</a></li>*/}
-						<li><a onClick={(e) => this.handleClick(e,"chat_change_title")}>{strings.change_title}</a></li>
+						<li><a onClick={(e) => this.handleClick(e,"chat_change_title")}><img src="static/images/text-field.png" title={strings.change_title}/></a></li>
 						
 						</div>: ""
 				}

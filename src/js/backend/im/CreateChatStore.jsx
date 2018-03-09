@@ -70,8 +70,7 @@ class CreateChatStore extends EventEmitter{
               } else {
                 var j = JSON.parse(res.text);
   				this.emit("CHAT_CREATED",j);
-  				window.chat_response = j;
-              }
+  			  }
             }); 
 
   }

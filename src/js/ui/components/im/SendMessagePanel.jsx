@@ -13,7 +13,7 @@ window.photo_id = "";
 var DataTransfer = require('fbjs/lib/DataTransfer');
 
 
-const progressLink = "http://qwertyangry.pythonanywhere.com/static/images/circle-loading.gif";
+const progressLink = "/static/images/circle-loading.gif";
 
 
 import LocalizedStrings from 'react-localization';
@@ -64,15 +64,28 @@ class SendMessagePanel extends Component {
 			
 			isUploading: false,
 			attachments: [],
-			type: "" 
+			type: "",
+			msgAttachments: MessagesStore.getMessageAttachments()
 		};
 	}
 
+	
+	
+	componentWillMount(){
+		MessagesStore.on("MESSAGE_ATTACHMENT_ADDED",() => {
+			this.setState({
+				msgAttachments: MessagesStore.getMessageAttachments()
+			})
+		})
+	}
+	
   handleSubmit(e){
   	e.preventDefault();
 	var cC = MessagesStore.getSelectedConversation();
 	let d = new Date().getTime();
 	let me = MessagesStore.getMe();
+	let msgAttachments = MessagesStore.getMessageAttachmentsFormatted();
+
 
 	this.message={
 			mid: -1,
@@ -90,13 +103,15 @@ class SendMessagePanel extends Component {
     //MessagesStore.addDlgMessage(this.message);
     //alert(" casd" + cC.chat_id);
 	
-	SendMessage.send(this.state.messageText,cC.uid,cC.chat_id);
+	
+	SendMessage.send(this.state.messageText,cC.uid,cC.chat_id,msgAttachments);
 
     this.setState({
 		messageText: ""
 	});
 	window.photo_id = "";
 	MessagesStore.resetSelectedMessages();
+	MessagesStore.resetMessageAttachments()
   }
 
   cancelFwdMessages(e){
@@ -104,11 +119,10 @@ class SendMessagePanel extends Component {
 	MessagesStore.resetSelectedMessages();  	
   }
   
-  cancelAttachments(e){
+  cancelAttachment(e,i){
   	e.preventDefault();
-	window.photo_id = "";
-	this.setState({ type: ""});
-	}
+	 MessagesStore.removeMessageAttachment(i)
+	 }
   
 
 	autoGrow(element) {
@@ -151,18 +165,12 @@ class SendMessagePanel extends Component {
 	}
 
 	handleChangeAttachments(e,a){
-		e.preventDefault();
-		if (this.state.attachments.length > 0){
-			var r = confirm(strings.file_upload_attention);
-			if (!r) return;
-		}
-		window.photo_id = "";
 		var files
 		if (a == "paste") {
 			files = e;
 		}
 		else {
-			window.test_a = a;
+			e.preventDefault();
 			files = e.target.files;
 		}
 		this.setState({
@@ -184,34 +192,8 @@ class SendMessagePanel extends Component {
                  	alert(strings.error);
                  	return;
                  }
-				 if (j[0]){
-					 if (typeof j[0].id == "undefined"){
-						 this.setState({
-							 type: "doc"
-						 })
-						this.addAttachment("doc" + j[0].owner_id + "_" + j[0].did);
-						window.photo_id = "doc" + j[0].owner_id + "_" + j[0].did ; 
-					 }
-					 else {
-						 this.setState({
-							 type: "photo"
-						 })
-						 this.addAttachment(j[0].id);
-					
-						window.photo_id += j[0].id ;
-					 }
-				 }
-				 else {
-					 this.setState({
-							 type: "audio"
-						 })
-						
-					this.addAttachment("audio" + j.owner_id + "_" + j.aid);
-					 window.photo_id = "audio" + j.owner_id + "_" + j.aid 
-				 }
-                /* if (window.photo_id != "" && typeof window.photo_id != "undefined" && window.photo_id) 
-                 			window.photo_id += ", ";*/
-                 
+				 MessagesStore.parseMessageAttachment(j)
+			
                  alert(strings.uploaded);
               }
 			  
@@ -230,6 +212,7 @@ class SendMessagePanel extends Component {
 			this.handleSubmit(e);
 		}
 		else {
+			MessagesStore.resetMessageAttachments()
 			CreateChatStore.createChat(this.state.messageText);
 		}
 	}
@@ -249,6 +232,21 @@ class SendMessagePanel extends Component {
 	
 	showProgress(){
 		return  <img src={progressLink} style={progressStyle} />	 
+	}
+	
+	
+	formatMsgAttachments(){
+		const elements = this.state.msgAttachments 
+		const listeleelements = elements.map((e,i) => {
+			return <li className="attachment_li">
+							<span className="fwd_messages_label">
+								 { (e.title) ? e.title : "attachment" + i}
+								<a onClick={(e1) => this.cancelAttachment(e1,i)}> X</a>
+						 	</span>
+						</li>
+		})
+		
+		return listeleelements
 	}
 	
   render() {
@@ -285,7 +283,7 @@ class SendMessagePanel extends Component {
 					}
 				</div>
 				{
-				(this.props.selectedMessages || this.state.type != "") ?	
+				(this.props.selectedMessages || this.state.msgAttachments.length >0) ?	
 				
 				<div style={{display: "block"}}  className="dlg_user_actions_wrapper" id="dlg_user_action">
 					<div className="dlg_user_actions">
@@ -298,14 +296,7 @@ class SendMessagePanel extends Component {
 						 	</span>
 						</li>
 						: "" }
-						{(this.state.type != "") ?
-						<li className="attachment_li">
-							<span className="fwd_messages_label">
-								Attachments {this.state.type}
-								<a onClick={(e) => this.cancelAttachments(e)}> X</a>
-						 	</span>
-						</li>
-						: "" }
+						{ this.formatMsgAttachments() }
 					  </ul>
 					</div>	
 				</div> : " "

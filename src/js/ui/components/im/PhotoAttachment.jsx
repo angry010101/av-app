@@ -11,6 +11,7 @@ import Lightbox from 'react-images';
 
 import dispatcher from "js/backend/Dispatcher.jsx"
 
+import { replace_url } from  'js/backend/ReplaceUrl.jsx'
 import MessagesStore from 'js/backend/im/MessagesStore.jsx'
 class PhotoAttachment extends Component {
   constructor(props) {
@@ -33,10 +34,10 @@ class PhotoAttachment extends Component {
 
 		
 		element.srcSet = []
-		if (element.src_small) element.srcSet.push(element.src_small + " 320w") 
-		if (element.src_big) element.srcSet.push(element.src_big + " 500w")
-		if (element.src_xbig) element.srcSet.push(element.src_xbig + " 800w")
-		if (element.src_xxbig) element.srcSet.push(element.src_xxbig + " 1024w")
+		if (element.src_small) element.srcSet.push(replace_url + element.src_small + " 320w") 
+		if (element.src_big) element.srcSet.push(replace_url + element.src_big + " 500w")
+		if (element.src_xbig) element.srcSet.push(replace_url + element.src_xbig + " 800w")
+		if (element.src_xxbig) element.srcSet.push(replace_url + element.src_xxbig + " 1024w")
 		
 		 dispatcher.dispatch({
 			type: 'showShadowView',
@@ -56,10 +57,10 @@ class PhotoAttachment extends Component {
 
 		
 		element.srcSet = []
-		if (element.src_small) element.srcSet.push(element.src_small + " 320w") 
-		if (element.src_big) element.srcSet.push(element.src_big + " 500w")
-		if (element.src_xbig) element.srcSet.push(element.src_xbig + " 800w")
-		if (element.src_xxbig) element.srcSet.push(element.src_xxbig + " 1024w")
+		if (element.src_small) element.srcSet.push(replace_url + element.src_small + " 320w") 
+		if (element.src_big) element.srcSet.push(replace_url + element.src_big + " 500w")
+		if (element.src_xbig) element.srcSet.push(replace_url + element.src_xbig + " 800w")
+		if (element.src_xxbig) element.srcSet.push(replace_url + element.src_xxbig + " 1024w")
 		
 		arr.push(element);
 	
@@ -77,8 +78,8 @@ class PhotoAttachment extends Component {
       <div className="attachment_img_wrapper" onClick={(e) => this.handleClick(e)}>
       {
         (this.props.isbig == 1) ? 
-        <img className="photo_attachment_img_big" src={this.props.info[0].photo.src_big} /> :
-        <img className="photo_attachment_img" src={this.props.info.src} /> 
+        <img className="photo_attachment_img_big" src={replace_url + this.props.info[0].photo.src_big} /> :
+        <img className="photo_attachment_img" src={replace_url + this.props.info.src} /> 
       }
       </div>
     );

@@ -1,0 +1,61 @@
+img{
+	max-width: 100%;
+}
+
+h1, h2{
+	margin: 0;
+	padding: 0;
+}
+
+h2{
+	font-size: 56px;
+}
+
+.description_text{
+	max-width: 1000px;
+	display: block;
+	margin: 0 auto;
+font-family: arial,sans-serif;
+}
+
+.proses_text{
+	text-align: center;
+	margin: 36px;
+	font-size: 52px;
+}
+
+.description_censored{
+	margin: 0 auto;
+	
+	font-family: arial,sans-serif;
+	max-width: 1000px;
+}
+
+.censored_text{
+	color: white;
+}
+
+.wrapper_censored{
+	padding: 26px 16px;
+	background: black;
+}
+
+.wrapper_important{
+	padding: 26px 16px;
+	background-color: #2da5ff;
+}
+
+.wrapper{
+	padding: 26px 16px;
+}
+
+
+
+.wrapper_open{
+	padding: 26px 16px;
+	background-color: #72dc58;
+}
+
+.white{
+	color: white;
+}

@@ -1,19 +1,19 @@
 
 .send_msg_block {
 	background-color: #ddd !important;
-	position: absolute;
-	min-height: 92px;
+	/*position: absolute;*/
+	min-height: 82px;
 	/*height: 196px;*/
 	width: 100%;
 	overflow: auto;
 	/*resize: vertical;
 	transform: rotate(180deg);*/
 	max-height: 244px;
-	bottom: 0px;
+	/*bottom: 0px;*/
 	/*padding-bottom: 18px;*/
 	padding-top: 4px;
 	padding-bottom: 6px;
-	border-top: 1px #9295f1 solid;
+	border-top: 1px solid #3c99b4;
 }
 
 .send_msg_block textarea{
@@ -30,6 +30,9 @@
 	font-family: sans-serif;
 	padding-left: 6px;
 	padding-top: 3px;
+	
+	bottom: 0px;
+	position: relative;
 }
 
 .btn_attachments{
@@ -67,7 +70,7 @@
 }
 
 .send_btn_input{
-	background: url("http://qwertyangry.pythonanywhere.com/static/images/send-btn.png");
+	background: url("/static/images/send-btn.png");
     background-size: auto auto;
 	width: 30px;
 	height: 30px;
@@ -95,10 +98,11 @@
 }
 
 .dlg_user_actions{
-	overflow-x: scroll;
 	height: 100%;
 	padding-left: 44px;
 	padding-right: 64px;
+	padding-bottom: 12px;
+
 }
 
 .dlg_user_actions img{

@@ -19,8 +19,11 @@ class ForwardedMessage extends Component {
     });
     if (this.props.recursive == 1){
       this.recursive = 1;
-    }
-
+		if (typeof this.user == "undefined"){
+			 UsersStore.addUserRequest(e.uid);
+		}
+	}
+	
 
   }
 
@@ -52,8 +55,9 @@ class ForwardedMessage extends Component {
       <div className="msg_wrapper" >
         <div className="msg_container">
           <div className="msg_img_div">
-            <img className="photo_img" src={ (typeof this.state.user != "undefined") ?
-              ("https://vkuk.000webhostapp.com/getcontent.php?url=") + this.state.user.photo_50 : ""} />
+            <img className="photo_img" src={ 
+			(typeof this.state.user != "undefined") ?
+             ((this.state.user.photo_50) ? this.state.user.photo_50  : this.state.user.photo) : ""} />
           </div>
           <div className="msg_content_div">
               
@@ -61,7 +65,7 @@ class ForwardedMessage extends Component {
                 <div className="msg_name_text">
                   {
                     (typeof this.state.user != "undefined") ?
-                    this.state.user.first_name + " " + this.state.user.last_name : ""}
+                    ( (this.state.user.first_name) ? this.state.user.first_name + " " + this.state.user.last_name : this.state.user.name ) : ""}
                 </div>
                 <br />
                   { /*formatDate(this.props.msg.date)*/ }

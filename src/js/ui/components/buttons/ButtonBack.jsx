@@ -3,7 +3,7 @@ import 'css/components/buttons/button_back.css'
 
 import * as MsgActions from 'js/backend/im/MsgActions.jsx'
 
-const btn_url = "http://qwertyangry.pythonanywhere.com/static/images/back_button.png"
+const btn_url = "/static/images/back_button.png"
 
 
 import LocalizedStrings from 'react-localization';

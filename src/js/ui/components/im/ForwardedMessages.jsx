@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import 'css/components/im/dialog_message.css'
+
+import 'css/components/im/forwarded_messages.css'
 import { formatDate } from 'js/backend/formatDate.jsx'
 import DialogAttachments from 'js/ui/components/im/DialogAttachments.jsx' ;
 
@@ -40,7 +42,7 @@ class ForwardedMessages extends Component {
     UsersStore.loadUsersToAdd();
     
     return (
-      <div >
+      <div className="fwd_messages_container">
         {
           this.props.info.map((e) => this.prepareMessage(e))
         }

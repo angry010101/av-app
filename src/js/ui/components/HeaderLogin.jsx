@@ -6,6 +6,9 @@ import 'css/components/header.css';
 import MainHeaderContentNoAuth from 'js/ui/components/MainHeaderContentNoAuth.jsx'
 
 
+import LocalizedStrings from 'react-localization';
+ 
+var i = 0
 class HeaderLogin extends Component {
     constructor(){
         super();
@@ -20,6 +23,9 @@ class HeaderLogin extends Component {
         this.changeSearch = this.changeSearch.bind(this);
     }
 
+	changeLanguage(){
+	}
+	
     expClick(e){
         if (!this.state.isShown){
             this.setState({
@@ -40,6 +46,7 @@ class HeaderLogin extends Component {
     }
 
     showSearch(e){
+		this.changeLanguage();
 		//to owrk uncomment
 		/*
         this.setState({
@@ -69,6 +76,8 @@ class HeaderLogin extends Component {
                 ({"display": "block"}); 
 
         return (
+			<div>
+			<div className="header_block"></div>
             <div className="header">
                
                 {
@@ -89,7 +98,7 @@ class HeaderLogin extends Component {
                 <div className="main_header_content_wrapper">
                     <MainHeaderContentNoAuth />
                 </div>
-				
+			</div>
             </div>
     );
   }

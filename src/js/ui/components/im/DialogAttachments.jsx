@@ -134,7 +134,7 @@ class DialogAttachments extends Component {
 	}
 
     return (
-      <div className="attachments_wrapper"><br />
+      <div className="attachments_wrapper">
         { (this.props.info[0].type != "photo") ? <div>
             { this.props.info.map((e) => this.select(e,this.count)) }
             </div> : ""

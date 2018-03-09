@@ -23,25 +23,7 @@ class MessagesPreviewContainer extends MessagesContainer {
     startLoadingPreviewMessages();
   }
   componentWillMount(){
-    
-  }
-  
-  updateMessages(){
-	  this.setState({
-          msgs: MessagesStore.getPrevMessages(),
-          msgscount: MessagesStore.getPrevMessagesCount()
-      });
-  }
-
-  updateMessage(){
-	  this.setState({
-          msgs: MessagesStore.getPrevMessages(),
-          msgscount: MessagesStore.getPrevMessagesCount()
-      });
-  }
-  
-  componentDidMount(){
-	MessagesStore.on("addedPrevMessage", ()=>{
+    MessagesStore.on("addedPrevMessage", ()=>{
 		this.setState({
           msgs: MessagesStore.getPrevMessages(),
           msgscount: MessagesStore.getPrevMessagesCount()
@@ -52,7 +34,7 @@ class MessagesPreviewContainer extends MessagesContainer {
           msgs: MessagesStore.getPrevMessages(),
           msgscount: MessagesStore.getPrevMessagesCount()
       });
-	  window.test_msgs =this.state.msgs;
+	   
 	});
 	
     UsersStore.on("USERS_CHANGED",(type,p1,p2,p3) => {
@@ -61,6 +43,10 @@ class MessagesPreviewContainer extends MessagesContainer {
           msgscount: MessagesStore.getPrevMessagesCount()
       });
 	});
+  }
+  
+  componentDidMount(){
+	
   }
   
   componentWillUnmount(){ 
@@ -81,24 +67,26 @@ class MessagesPreviewContainer extends MessagesContainer {
       MsgActions.showBackBtn();
   }
 
- ListItem(m,k1) {
+ ListItem(m,k) {
   //if (parseInt(m.uid)<0) return "";
   
-  return <div>
-        <li onClick={(e) => this.selectDialog(e,m)} key={k1}>
+  return <li key={k} onClick={(e) => this.selectDialog(e,m)} >
             <Message contents={ m }/> 
          </li>
-      </div>;
   }
 
 
   MessagesContainerFun() {
     const msgs = this.state.msgs;
 	const count = this.state.msgscount;
-    const listItems = msgs.map((message) => 
-      this.ListItem(message,(message.chat_id) ? message.chat_id + 10000000000 :  message.mid)
+    const listItems = msgs.map((message) => {
+	  let k = message.mid 
+	  console.log("key: " + k);
+	  return this.ListItem(message,k) 
+	  }
     );
   
+	console.log("ended")
     return (
       <div >
         <ul className="list_messages_container">

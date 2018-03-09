@@ -6,6 +6,7 @@ import ShadowViewHeader from 'js/ui/components/ShadowView/ShadowViewHeader.jsx'
 import ShadowViewFooter from 'js/ui/components/ShadowView/ShadowViewFooter.jsx'
 
 
+import UsersStore from 'js/backend/im/UsersStore.jsx'
 
 import HandleShadowViewActions from 'js/backend/HandleShadowViewActions.jsx'
 import * as ShadowActions from 'js/backend/ShadowViewActions.jsx'
@@ -51,6 +52,11 @@ class LightboxFwdMsgs extends Component {
     }
 
     render() {
+		
+		
+		const ut = this.state.msgs.map((e) => this.handleMsgs(e));
+		
+		UsersStore.loadUsersToAdd();
         if (!this.state.show) return "";
         return (
             <div className="shadow_view_wrapper" id="shadow_view_wrapper">
@@ -60,7 +66,7 @@ class LightboxFwdMsgs extends Component {
                     <ShadowViewHeader close={this.handleClose} />
                     <div className="shadow_view_content">
                         {
-                            this.state.msgs.map((e) => this.handleMsgs(e))
+                            ut
                         }
                     </div>
                     {/*<ShadowViewFooter />*/}

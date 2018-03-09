@@ -12,6 +12,7 @@ import UsersStore from 'js/backend/im/UsersStore.jsx'
 
 import dispatcher from "js/backend/Dispatcher.jsx"
 
+import { replace_url } from  'js/backend/ReplaceUrl.jsx'
 
 
 
@@ -19,13 +20,16 @@ import LocalizedStrings from 'react-localization';
  
 let strings = new LocalizedStrings({
  en:{
-   message_deleted: "Deleted"
+   message_deleted: "Deleted",
+   withsmb: "with"
  },
  ua: {
-   message_deleted: "Видалено"
+   message_deleted: "Видалено",
+   withsmb: "p"
  },
  ru: {
-   message_deleted: "Удалено"
+   message_deleted: "Удалено",
+   withsmb: "c"
  }
 });
 
@@ -116,14 +120,15 @@ class DialogMessage extends Component {
     }
 
   render() {
-	 
+	let pic_url = (replace_url)
+	let t = ( this.state.user.photo_50) ? this.state.user.photo_50 : this.state.user.photo 
+	pic_url += t 
     var a1 = 1;
     return (
       <div onMouseOver={this.selection.bind(this)} className={ (this.state.selected === false) ? 'msg_wrapper' : 'msg_wrapper  selected' } style="" ref="myInput" key={this.state.mid} style={this.state.style} onClick={this.changeSt.bind(this)} >
         <div className="msg_container">
           <div className="msg_img_div">
-            <img className="photo_img" src={
-              /*("https://vkuk.000webhostapp.com/getcontent.php?url=") + */( this.state.user.photo_50) ? this.state.user.photo_50 : this.state.user.photo } />
+            <img className="photo_img" src={pic_url} />
           </div>
           <div className="msg_content_div">
               
@@ -132,7 +137,7 @@ class DialogMessage extends Component {
                   {(this.state.user.first_name) ? this.state.user.first_name + " " + this.state.user.last_name : ""}
 				  {(this.state.user.gid) ? this.state.user.name : ""}
 				  
-				 { (this.props.isSearch && this.state.out == 1) ? "with uid:" + ((this.state.interlocutor.first_name) ? this.state.interlocutor.first_name : this.state.interlocutor.chat_title) : ""}
+				 { (this.props.isSearch && this.state.out == 1) ? strings.withsmb + ((this.state.interlocutor.first_name) ? this.state.interlocutor.first_name : this.state.interlocutor.chat_title) : ""}
                 </div>
                 <div className="msg_delete">
                   <a onClick={(e) => this.deleteMsg(e)}>X</a>

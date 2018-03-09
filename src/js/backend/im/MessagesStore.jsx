@@ -43,12 +43,55 @@ class MessagesStore extends EventEmitter{
      		 this.startLongPollHistory();
     		});*/
 
+		this.messageAttachments = []
 	}
 	
 	
 	resetAttachments(){
 		this.attachments = []
 	}
+	
+	removeMessageAttachment(i){
+		this.messageAttachments.splice(i,1) 
+		this.emit("MESSAGE_ATTACHMENT_ADDED")
+	}
+	
+	
+	resetMessageAttachments(){
+		this.messageAttachments = []
+		this.emit("MESSAGE_ATTACHMENT_ADDED")
+	}
+	
+	getMessageAttachments(){
+		return this.messageAttachments
+	}
+	
+	getMessageAttachmentsFormatted(){
+		let a = this.messageAttachments
+		let arr = []
+		let str = ""
+		window.test_att = a
+		for (var i = 0 ; i < a.length; i++){
+			if (a[i]){
+				if (typeof a[i].id == "undefined" && typeof a[i].aid == "undefined"){
+					arr.push("doc" + a[i].owner_id + "_" + a[i].did)
+				}
+				else {
+					if (a[i].aid && a[i].title){
+						arr.push("audio" + a[i].owner_id + "_" + a[i].aid)
+					}
+					else {
+						arr.push(a[i].id)						
+					}
+				}
+			}
+			else {
+				
+			}
+		}
+		return arr.join(",")
+	}
+	
 	getAttachments(){
 		return this.attachments;
 	}
@@ -68,6 +111,16 @@ class MessagesStore extends EventEmitter{
 			}
 			this.emit("addedDlgMessages");
 		}		
+	}
+	
+	markAsReadBeforeId(mid){
+		let msgs = this.dlgMsgs
+		for (var i=0;i< msgs.length;i++){
+			if (msgs[i].mid < mid){
+				msgs[i].read_state = 1
+			}
+		}
+		this.dlgMsgs = msgs
 	}
 
 	isAddingUserToChat(){
@@ -92,43 +145,76 @@ class MessagesStore extends EventEmitter{
 
 		var c = text.messages.splice(0,1);
 		this.addUsers(text.profiles);
+		this.loadUsersIfNotInMessages(text.messages,text.profiles);
 		this.addOrUpdPrevMessages(text.messages,text.profiles,c,1);
 	}
 
+	loadUsersIfNotInMessages(m,p){
+		let userstoload = [];
+		for (var i=0;i<m.length;i++){
+			if (UsersStore.getById(m[i].uid)){
+				continue
+			}
+			else {
+				userstoload.push(m[i].uid);
+			}
+		}
+		window.test_users_to_add = userstoload;
+	}
+	
+	
+	parseMessageAttachment(j){
+		this.messageAttachments.push(j[0])
+		this.emit("MESSAGE_ATTACHMENT_ADDED")
+	}
+	
 	addOrUpdPrevMessages(msgs,profiles,c,toend){
 		
 		for (var i=0;i<c;i++){
-			var cm = this.prevMsgs.find((e) => { return e.chat_id === msgs[i].chat_id && msgs[i].chat_id} );
-				if (typeof cm != "undefined"){
+			var cm = this.prevMsgs.find((e) => { return e.chat_id === msgs[i].chat_id} );
+				if (typeof cm != "undefined" && typeof cm.chat_id != "undefined"){
+					if(window.debug) alert("add chat msg")
 					var ind = this.prevMsgs.indexOf(cm);
 					this.prevMsgs.splice(ind,1);
-					var tuser = cm.user;
-					var m1 = msgs[i];
-					m1.user = tuser;
-					this.addPrevMessage(m1);
+					var tuser = UsersStore.getById(msgs[i].uid);
+					let m2 = msgs[i];
+					m2.body = "" + msgs[i].body
+					m2.user = tuser;
+					this.addPrevMessage(m2);
 					//fwd and attachments
 					// add offset
 					if (this.selectedConversation.chat_id == msgs[i].chat_id){
 						window.dlgsOffset++;
+						this.markAsReadBeforeId(msgs[i].mid);
 						this.addDlgMessage(msgs[i]);
 					}
+					
+					
+					this.prevMsgs = [].concat(this.prevMsgs)
+					this.emit("addedPrevMessages")
+					
+
 					continue;
 				}		
 
 				//gid ?? id
-			var cm = this.prevMsgs.find((e) => e.uid === msgs[i].uid);
+			var cm = this.prevMsgs.find((e) => (e.uid === msgs[i].uid && typeof e.chat_id == "undefined"));
 		
 			if (typeof cm != "undefined"){
 				var ind = this.prevMsgs.indexOf(cm);
 				this.prevMsgs.splice(ind,1);
 				var tuser = cm.user;
+				if (typeof tuser == "undefined"){
+					tuser = UsersStore.getById(msgs[i].uid);
+				}
 				var m1 = msgs[i];
 				m1.user = tuser;
 				this.addPrevMessage(m1);
 				//fwd and attachments
 				// add offset
-				if (this.selectedConversation.uid == msgs[i].uid){
+				if (this.selectedConversation.uid == msgs[i].uid && this.selectedConversation.chat_id<0){
 					window.dlgsOffset++;
+					this.markAsReadBeforeId(msgs[i].mid);
 					this.addDlgMessage(msgs[i]);
 				}
 			}
@@ -136,6 +222,9 @@ class MessagesStore extends EventEmitter{
 				window.prevOffset++;
 				this.addPrevMessage(msgs[i]);
 			}
+			
+					this.prevMsgs = [].concat(this.prevMsgs)
+					this.emit("addedPrevMessages")
 		}
 	}
 
@@ -623,6 +712,9 @@ class MessagesStore extends EventEmitter{
 			case "REMOVING_CHAT_USER":
 				if (!a.removing) return ;
 				this.chatAction("get_users",0);
+				break;
+			case "CLEAR_ATTACHMENTS":
+				this.attachments = []
 				break;
 			default:
 			break;

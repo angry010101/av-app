@@ -1,7 +1,7 @@
 .content {
 	height: 100%;
 
-	
+	margin: 0 0 !important;
 	display: flex;
 	background-color: white;
 	text-align: left;

@@ -15,6 +15,14 @@
 	margin-left: 8px;
 }
 
+.search_messages_peer_icon{
+	margin-left: 4px;
+	display: inline-block;
+	margin-top: 1px;
+	width: 10px;
+	height: 11px;
+}
+
 
 .prev_msg_container {
 	background-color: #fcfcfc;
@@ -117,7 +125,7 @@
     display: block;
     text-overflow: ellipsis;
     float: left;
-    max-width: calc(100% - 96px);
+    max-width: calc(100% - 108px);
     font-weight: bold;
 }
 

@@ -10,32 +10,35 @@ import LocalizedStrings from 'react-localization';
  
 let strings = new LocalizedStrings({
  en:{
-   vk_login: "VK Login or phone",
+   vk_login: "VK Login",
    vk_password: "VK Password",
    login_placeholder: "",
    login_title: "Login must be here",
    password_title: "Password must be here",
-   error: "Incorrent login or password"
+   error: "Incorrent login or password",
+   send: "Sign in"
  },
  ua: {
-   vk_login: "ВК Логін або номер телефону",
+   vk_login: "ВК Логін",
    vk_password: "ВК пароль",
    login_placeholder: "",
    login_title: "Логін або номер телефону",
    password_title: "Пароль",
-   error: "Неправильний логін або пароль"
+   error: "Неправильний логін або пароль",
+   send: "Увійти"
  },
  ru: {
-   vk_login: "ВК Логин или номер телефона",
+   vk_login: "ВК Логин",
    vk_password: "ВК Пароль",
    login_placeholder: "",
    login_title: "Введите логин",
    password_title: "Пароль",
-   error: "Неправильний логин или пароль"
+   error: "Неправильный логин или пароль",
+   send: "Войти"
  }
 });
 
-const imgLoading = "http://qwertyangry.pythonanywhere.com/static/images/circle-loading.gif"
+const imgLoading = "/static/images/circle-loading.gif"
 
 const styleLoading = {
 	"width": "48px",
@@ -86,11 +89,13 @@ class LoginForm extends Component {
 	}
 
 	req(e){
+		document.getElementById("sbm").disabled = true
       request
         .post('/auth')
         .send("email=" + this.state.login)
         .send("password=" + this.state.password)
         .end((err, res) => {
+				document.getElementById("sbm").disabled = false
                 if (err || !res.ok) {
                  alert('An error happened. Please, try again later');
                 } 
@@ -139,7 +144,7 @@ class LoginForm extends Component {
               <span className="label pass_label">{strings.vk_password}</span><br />
               <input onChange={(e) => this.updatePassword(e)} className="textinput pass_input" type="password" title={strings.password_title} />
               <br />
-              <input className="submit_btn" type="submit" id="sbm" name="submit" /><br /><br />
+              <input className="submit_btn" type="submit" id="sbm" name="submit" value={strings.send} /><br /><br />
 			  { (this.state.isLoginning) ? <img style={styleLoading} src={imgLoading} /> : "" } 
           </form>
      	</div>

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import 'css/components/im/audio_message.css'
 import LocalizedStrings from 'react-localization';
  
+import { replace_url } from  'js/backend/ReplaceUrl.jsx'
 let strings = new LocalizedStrings({
  en:{
    audio_message:"Audio Message",
@@ -21,7 +22,7 @@ let strings = new LocalizedStrings({
 class AudioMessage extends Component {
   constructor(props) {
     super(props);
-    this.url = "http://mkv40768.000webhostapp.com/getaudio.php?url=" + this.props.info.url;
+    this.url = replace_url + this.props.info.url;
   }
 
 

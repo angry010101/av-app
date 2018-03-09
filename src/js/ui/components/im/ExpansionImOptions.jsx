@@ -5,6 +5,10 @@ import * as SD from 'js/backend/im/SearchDialog.jsx'
 import dispatcher from "js/backend/Dispatcher.jsx"
 
 import LocalizedStrings from 'react-localization';
+
+
+import MessagesStore from 'js/backend/im/MessagesStore.jsx'
+
  
 let strings = new LocalizedStrings({
  en:{
@@ -27,6 +31,8 @@ let strings = new LocalizedStrings({
  }
 });
 
+
+
 class ExpansionImOptions extends Component {
      constructor(props){
         super(props);
@@ -37,27 +43,43 @@ class ExpansionImOptions extends Component {
         };
     }
 
+	componentWillMount(){
+		dispatcher.register((d) => { if (d.type == "SHOW_SEARCH_DIALOG_MESSAGES") { 
+				if (d.buttonClicked){
+					this.setState({
+						searchMessages: false
+					});	
+					return 
+				}
+				this.setState({
+					searchMessages: !this.state.searchMessages
+				});	
+		}});
+	}
+	
+	
     handleClick(e,l){
         alert("expansion: " + l);
     }
 
     handleCreateChat(e){
         e.preventDefault();
+		
+		MessagesStore.resetSelectedMessages();
+		MessagesStore.resetAttachments();
         var x = this.state.isCreatingChat;
 		MsgActions.createChat(x);
-        
         this.setState({
-            isCreatingChat: !x
-        });
+					isCreatingChat: !x
+				});	
+        
         SD.searchDialog("");
     }
 	
 	
     handleCreateSearch(e){
         e.preventDefault();
-		this.setState({
-			searchMessages: !this.state.searchMessages
-		});	
+		
 		MsgActions.searchMessages(!this.state.searchMessages);
     }
 	
@@ -73,13 +95,13 @@ class ExpansionImOptions extends Component {
 	}
 
     render() {
-		let photo_search = "http://qwertyangry.pythonanywhere.com/static/images/search_messages.png";
-		let photo_chat = "http://qwertyangry.pythonanywhere.com/static/images/plus.ico";
+		let photo_search = "/static/images/search_messages.png";
+		let photo_chat = "/static/images/multy-user.svg";
 		
         let text_chat = (this.state.isCreatingChat) ?  strings.cancel_chat : strings.create_chat ;
 		let search_msgs = (!this.state.searchMessages) ?  strings.search : strings.cancel_search ;
 		if (this.state.isCreatingChat || this.state.searchMessages) { 
-			photo_chat = "http://qwertyangry.pythonanywhere.com/static/images/cancel.png"
+			photo_chat = "/static/images/cancel.png"
 			photo_search = photo_chat;
 		} 
         return (

@@ -7,8 +7,14 @@
 	display: flex;
 	width: 100%;
 	top: 0;
+	position: fixed;
+	box-shadow: 0 0 8px;
 }
 
+.header_block{
+	height: 42px;
+	width: 100%;
+}
 .header img{
 
 }

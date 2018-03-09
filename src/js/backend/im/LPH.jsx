@@ -20,6 +20,7 @@ let strings = new LocalizedStrings({
 });
 
 export function startLongPollHistory(){
+	if (window.debug) return 
      if (typeof window.lastMsgId == "undefined" ){          
 		setTimeout(() => { startLongPollHistory(); },window.timeLPH);	 
       return ;

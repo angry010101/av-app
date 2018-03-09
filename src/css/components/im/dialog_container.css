@@ -1,6 +1,6 @@
 
 .dialog_container_div{
-	height: calc(100% - 102px) ;
+	height: calc(100% - 92px) ;
 	overflow-x: none;
 	overflow-y: auto;
 	-webkit-overflow-scrolling:touch;

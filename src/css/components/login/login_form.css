@@ -5,7 +5,7 @@
 }
 
 .form_login{
-	width: 300px;
+	width: 256px;
 	padding-bottom: 20px;
 	margin: 0 auto;
 }
@@ -15,7 +15,7 @@
 }
 
 .textinput {
-	width: 250px; /* width of image */
+	width: 228px; /* width of image */
 	font-size: 20px;
 	margin-top: 6px;
 	margin-bottom: 6px;
@@ -45,8 +45,11 @@
 }
 
 .submit_btn{
+	-webkit-border-radius:0px;
+	border-radius: 0;
+	-webkit-appearance: none;
 	margin-top: 16px;
-    width: 266px; /* width of image */
+    width: 248px; /* width of image */
     height: 50px; /* height of image */
     border: 0;
     background-color: #E7E9EA;

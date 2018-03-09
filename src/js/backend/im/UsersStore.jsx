@@ -110,10 +110,21 @@ class UsersStore extends EventEmitter{
               } else {
                  window.res = res;
                  var j = JSON.parse(res.text);
-				 this.addUsers(j);
-				 j.map((e) => {
-				 	this.emit("ADDED_USER",e);
-				 })
+				 
+				 var tarr = [];
+				 for (var i =0;i<j.length;i++){
+					var te = j[i];
+					 
+					 if (typeof te.gid != "undefined"){
+						 te.uid = -1 * parseInt(te.gid)
+					 }
+					 
+				 	 this.emit("ADDED_USER",te);
+					 tarr.push(te)
+				 }
+				 
+				 this.addUsers(tarr);
+				
               }
 
             }); 

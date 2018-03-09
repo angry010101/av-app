@@ -24,13 +24,19 @@ export function selectDialogMessage(mid){
 }
 
 
-export function searchMessages(startedSearching){
+export function searchMessages(startedSearching,pid){
 	dispatcher.dispatch({
 		type: "SHOW_SEARCH_DIALOG_MESSAGES",
-		startedSearching
+		startedSearching,
+		pid
 	});
 	
-	if (startedSearching) this.showBackBtn();
+	if (startedSearching){
+		this.showBackBtn();
+	}
+	else {
+		this.hideBackBtn();
+	}
 }
 
 
@@ -38,6 +44,11 @@ export function hideBackBtn(){
 	dispatcher.dispatch({
 		type: "HIDE_BACK_BTN",
 		param: creatingChat
+	});
+	dispatcher.dispatch({
+		type: "SHOW_SEARCH_DIALOG_MESSAGES",
+		startedSearching: false,
+		buttonClicked: true
 	});
 	if (creatingChat){//change to not creating chat
 		this.createChat(true);
@@ -116,6 +127,7 @@ export function removeChatUser(b){
 	this.hideBackBtn();
 }
 export function createChat(isCreatingChat){
+		
 		dispatcher.dispatch({
             type: "CREATE_CHAT",
             chatState: !isCreatingChat

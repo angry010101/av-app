@@ -5,7 +5,7 @@ import UsersStore from 'js/backend/im/UsersStore.jsx'
 const request = require('superagent');
 
 var startedLoadingMorePrev = false;
-
+window.prevOffset = 0
 export function startLoadingPreviewMessages(){    
           if (startedLoadingMorePrev) return ;
 

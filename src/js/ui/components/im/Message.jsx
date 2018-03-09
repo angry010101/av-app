@@ -9,6 +9,8 @@ import MessagesStore from 'js/backend/im/MessagesStore.jsx'
 
 import UsersStore from 'js/backend/im/UsersStore.jsx'
 
+import { replace_url } from  'js/backend/ReplaceUrl.jsx'
+
 const styleUnread={
   backgroundColor: "#bcd0ff"
 };
@@ -83,22 +85,16 @@ class Message extends Component {
     }*/
 	
   if (typeof this.state.user == "undefined" || this.state.user.err ){
-		if (parseInt(this.state.uid) < 0){
-			this.setState({
-				user: UsersStore.getById(1000000000 + (parseInt(this.state.uid)*(-1)))
-			})
-			window.test_user = this.state.user;
-			window.test_id = 1000000000 + (parseInt(this.state.uid)*(-1));
-		}
-		/*
-		UsersStore.on("ADDED_USER",(u) => {
-		if ((this.state.chat_id == u.uid && this.state.chat_id > 0) || (this.state.uid == u.uid && this.state.chat_id < 1) || (this.state.gid == u.uid && this.state.chat_id < 1)){
+		
+		UsersStore.once("ADDED_USER",(u) => {
+		if ((this.state.uid == u.uid && typeof this.state.chat_id == "undefined") ){
 				this.setState({
 					user: u
-				})
+				});
 			}
 		})
-		UsersStore.addUserImmediately(this.state.uid);*/
+		UsersStore.addUserRequest(this.state.uid);
+		UsersStore.loadUsersToAdd();
 	}
 	
 	MessagesStore.on("user_typing",(uid,cid) => {
@@ -127,12 +123,27 @@ class Message extends Component {
   handleSelect(e) {
     e.preventDefault();
     e.stopPropagation();
+	
     DialogActions.deleteDialog(this.state.uid,this.type);
+  }
+  
+  handleSearchPeer(e){
+	  e.preventDefault()
+	  e.stopPropagation();
+	  
+	(this.state.chat_id) ? 
+	MsgActions.searchMessages(!this.state.searchMessages,parseInt(this.state.chat_id) + 2000000000)
+	:	
+	MsgActions.searchMessages(!this.state.searchMessages,this.state.uid)
   }
 
   render() {
     let styleContainer = (this.props.contents.read_state == 0 && this.state.out == 1) ? "prev_msg_content  unread" : "prev_msg_content";
     //styleContainer = (this.state.selectedInMenu) ? "prev_msg_content selected_in_menu": "prev_msg_content"
+	
+	let turl = (typeof this.state.user != 'undefined') ? ((typeof this.state.user.gid == 'undefined') ? this.state.user.photo_50 : this.state.user.photo ): " " 
+	let img_url = replace_url + turl
+         
     return (
       <div >
       <a className="hover_a" onClick={(e) => this.handleClick(e)} > 
@@ -151,17 +162,16 @@ class Message extends Component {
           </div>
           <div  className="prev_date_text">
             { formatDate(this.state.date) }
-
-            <a className="select_dialog_btn" onClick={(e) => this.handleSelect(e)}> X</a>
+			
+			<a onClick={(e) => this.handleSearchPeer(e) }>
+				<img className="search_messages_peer_icon" src="/static/images/search_messages_peer.png" onClick={(e) => this.handleSearchPeer(e) }/>
+            </a>
+			<a className="select_dialog_btn" onClick={(e) => this.handleSelect(e)}> X</a>
           </div>
         </div>
         <div className="prev_img_div">
           <img className={(typeof this.state.user != 'undefined') ? (this.state.user.online != 1) ? "photo_img" : "img_online photo_img" : ""} 
-          src={
-			  
-            (typeof this.state.user != 'undefined') ? (
-		      (typeof this.state.user.gid == 'undefined') ? this.state.user.photo_50 : this.state.user.photo ): " " 
-          }
+          src={img_url}
           />
         </div>
       	<div className={ styleContainer } >
