@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const EncodingPlugin = require('webpack-encoding-plugin');
 
 const BUILD_DIR = path.resolve(__dirname, 'webpack-build/');
 const APP_DIR = path.resolve(__dirname, 'src/');
@@ -10,8 +11,9 @@ const config = {
     main:  APP_DIR + '/render_main.jsx',
     login: APP_DIR + '/render_login.jsx',
     about: APP_DIR + '/render_about.jsx',
-	friends: APP_DIR + '/render_friends.jsx'
-	
+    friends: APP_DIR + '/render_friends.jsx',
+    decree: APP_DIR + '/render_decree.jsx',
+    blocked: APP_DIR + '/render_blocked.jsx',
   },
   output: {
     path: BUILD_DIR,
